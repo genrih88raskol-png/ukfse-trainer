@@ -47,6 +47,7 @@ background:#30363d;
 
 <h2>Choose Mode</h2>
 
+<button onclick="showThemeTests()">🧩 Theme Tests</button>
 <button onclick="showStudy()">📚 Study Mode</button>
 <button onclick="startQuiz()">⚡ Quick Test</button>
 <button onclick="startExam()">🎓 Full Exam</button>
@@ -503,6 +504,39 @@ document.getElementById("question").innerHTML="📚 "+topic.toUpperCase();
 document.getElementById("answers").innerHTML="<p>"+text+"</p>";
 
 document.getElementById("result").innerHTML="";
+} 
+function showThemeTests(){
+
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
+
+document.getElementById("question").innerHTML="🧩 Theme Tests";
+
+document.getElementById("answers").innerHTML=
+"<button onclick='startTheme(\"survey\")'>Surveys</button>"+
+"<button onclick='startTheme(\"ism\")'>ISM</button>"+
+"<button onclick='startTheme(\"isps\")'>ISPS</button>"+
+"<button onclick='startTheme(\"mlc\")'>MLC</button>"+
+"<button onclick='startTheme(\"maib\")'>MAIB</button>";
+
+document.getElementById("result").innerHTML="";
+}
+
+function startTheme(theme){
+
+let filtered=questions.filter(q=>q.topic===theme);
+
+if(filtered.length===0){
+document.getElementById("question").innerHTML="No questions yet";
+document.getElementById("answers").innerHTML="";
+return;
+}
+
+questionsBackup=questions;
+questions=filtered;
+current=Math.floor(Math.random()*questions.length);
+showQuestion();
+
 } 
 </script>
 
