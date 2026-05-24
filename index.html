@@ -114,6 +114,7 @@ let questionsBackup=[];
 let current=0;
 let score=0;
 let mistakes=[];
+let weakTopics={};
 
 function startQuiz(){
 
@@ -162,6 +163,16 @@ document.getElementById("result").innerHTML=
 }else{
 
 mistakes.push(q.q);
+
+if(q.topic){
+
+if(!weakTopics[q.topic]){
+weakTopics[q.topic]=0;
+}
+
+weakTopics[q.topic]++;
+
+}
 
 document.getElementById("result").innerHTML=
 "❌ Wrong<br><br>Correct answer: "
