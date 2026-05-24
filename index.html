@@ -157,6 +157,8 @@ correct:2
 ];
 
 let current=0;
+let score=0;
+let mistakes=[];
 
 function startQuiz(){
 
@@ -193,13 +195,24 @@ document.getElementById("answers").innerHTML=html;
 
 function check(answer){
 
-if(answer===questions[current].correct){
+let q=questions[current];
 
-document.getElementById("result").innerHTML="✅ Correct";
+if(answer===q.correct){
+
+score++;
+
+document.getElementById("result").innerHTML=
+"✅ Correct | Score: "+score+"/"+questions.length;
 
 }else{
 
-document.getElementById("result").innerHTML="❌ Wrong";
+mistakes.push(q.q);
+
+document.getElementById("result").innerHTML=
+"❌ Wrong<br><br>Correct answer: "
++q.a[q.correct]+
+"<br><br>Score: "
++score+"/"+questions.length;
 
 }
 
