@@ -4,38 +4,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>UKFSE Trainer</title>
- 
+
 <style>
 body{
-font-family:Arial;
+font-family:Arial,sans-serif;
 background:#0d1117;
 color:white;
 padding:20px;
 text-align:center;
 }
-
+h1{font-size:42px;margin-top:40px;}
 .card{
 background:#161b22;
-padding:20px;
-border-radius:20px;
-margin-top:20px;
+padding:22px;
+border-radius:24px;
+margin-top:25px;
 }
-
 button{
 width:100%;
-padding:15px;
+padding:16px;
 margin:10px 0;
-font-size:18px;
+font-size:20px;
 border:none;
-border-radius:12px;
+border-radius:14px;
 background:#238636;
 color:white;
 }
-
-.answer{
-background:#30363d;
+.answer{background:#30363d;}
+textarea{
+width:92%;
+height:150px;
+border-radius:12px;
+font-size:17px;
+padding:12px;
 }
-
+p{font-size:20px;line-height:1.4;}
 </style>
 </head>
 
@@ -44,613 +47,308 @@ background:#30363d;
 <h1>UKFSE Trainer</h1>
 
 <div class="card" id="menu">
-
 <h2>Choose Mode</h2>
-
-
 <button onclick="showStudy()">📚 Study Mode</button>
 <button onclick="startQuiz()">⚡ Quick Test</button>
 <button onclick="startExam()">🎓 Full Exam</button>
+<button onclick="startOral()">🎤 Oral Exam</button>
 <button onclick="startScenario()">🚨 Emergency Scenarios</button>
 <button onclick="showProgress()">📊 Progress</button>
 <button onclick="showMistakes()">❌ Mistakes</button>
-
 </div>
 
 <div id="quiz" style="display:none;" class="card">
-
 <h2 id="question"></h2>
-
 <div id="answers"></div>
-
 <h3 id="result"></h3>
-
-<button onclick="nextQuestion()">Next Question</button>
+<button id="nextBtn" onclick="nextQuestion()">Next Question</button>
 <button onclick="backToMenu()">⬅️ Back to Menu</button>
-
 </div>
 
 <script>
-
 const questions=[
-
-{q:"Which survey issues a new certificate?",a:["Annual Survey","Renewal Survey","Intermediate Survey","Additional Survey"],correct:1},
-{q:"How many HSSC survey types exist?",a:["5","6","7","8"],correct:2},
-{q:"Which survey is a complete inspection before ship enters service?",a:["Annual","Initial","Intermediate","Periodical"],correct:1},
-{q:"Which survey is made after important repairs or renewals?",a:["Additional","Annual","Periodical","Bottom"],correct:0},
-
-{q:"Cargo ship over 300 GT on international voyages requires:",a:["Cargo Ship Safety Radio Certificate","Passenger Ship Safety Certificate","MLC only","ISM DOC only"],correct:0},
-{q:"Cargo ship over 500 GT on international voyages requires:",a:["Cargo Ship Safety Equipment Certificate","Fishing Certificate","Safe Manning only","Port Clearance"],correct:0},
-{q:"Passenger Ship Safety Certificate validity under HSSC is normally:",a:["5 years","1 year","3 months","Unlimited"],correct:1},
-
-{q:"What does ISM Code mainly cover?",a:["Safety Management","Cargo loading","Pilotage","Fishing operations"],correct:0},
-{q:"Company must hold under ISM:",a:["Document of Compliance","Certificate of Registry only","Crew List only","Loadline Plan"],correct:0},
-{q:"Ship must carry under ISM:",a:["SMC and copy of DOC","Only passport copies","Only crew contracts","Only port clearance"],correct:0},
-
-{q:"What does ISPS Code relate to?",a:["Security","Medical care","Pollution","Accommodation"],correct:0},
-{q:"Ship Security Plan for UK ships must be approved by:",a:["MCA","Port Agent","P&I Club","Charterer"],correct:0},
-{q:"SSAS is part of:",a:["ISPS Code","MLC","Load Line","COLREG"],correct:0},
-
-{q:"Minimum age to work onboard under MLC UK rules:",a:["14","15","16","18"],correct:2},
-{q:"Young seafarers under 18 generally must not work:",a:["At night","On deck","In port","With officers"],correct:0},
-{q:"Minimum notice period for SEA termination is normally:",a:["24 hours","3 days","7 days","1 month"],correct:2},
-
-{q:"If SEA is not in English, what must be onboard?",a:["English translation","Extra crew list","New passport","Medical log"],correct:0},
-{q:"Late payment of wages may attract interest of:",a:["5% per year","10% per year","20% per year","50% per year"],correct:2},
-{q:"Crew accommodation inspection interval:",a:["Every 7 days","Every month","Every 6 months","Only drydock"],correct:0},
-{q:"Food and drinking water inspection interval:",a:["Not less than once a week","Every day only","Every 3 months","Only after complaint"],correct:0},
-
-{q:"Official Log Book drill entries must be signed by:",a:["Master and one crew member","Agent only","Cook only","Chief Engineer only"],correct:0},
-{q:"Steering gear must be tested:",a:["Within 12 hours before sailing","Once per year","Only in drydock","After arrival only"],correct:0},
-{q:"OLB normally closes:",a:["6 months after first entry","Every week","Every year","Only when sold"],correct:0},
-
-{q:"MAIB accident report should be sent within:",a:["24 hours","7 days","14 days","1 month"],correct:0},
-{q:"Serious injury report may be sent within:",a:["14 days","24 hours","6 months","1 year"],correct:0},
-{q:"Evidence after accident must be preserved for up to:",a:["28 days unless released","3 days","7 days","1 year always"],correct:0}
-
+{q:"Which survey issues a new certificate?",a:["Annual Survey","Renewal Survey","Intermediate Survey","Additional Survey"],correct:1,topic:"survey"},
+{q:"How many HSSC survey types exist?",a:["5","6","7","8"],correct:2,topic:"survey"},
+{q:"Which survey is a complete inspection before ship enters service?",a:["Annual","Initial","Intermediate","Periodical"],correct:1,topic:"survey"},
+{q:"Which survey is made after important repairs or renewals?",a:["Additional","Annual","Periodical","Bottom"],correct:0,topic:"survey"},
+{q:"Cargo ship over 300 GT on international voyages requires:",a:["Cargo Ship Safety Radio Certificate","Passenger Ship Safety Certificate","MLC only","ISM DOC only"],correct:0,topic:"certificates"},
+{q:"Cargo ship over 500 GT on international voyages requires:",a:["Cargo Ship Safety Equipment Certificate","Fishing Certificate","Safe Manning only","Port Clearance"],correct:0,topic:"certificates"},
+{q:"Passenger Ship Safety Certificate validity under HSSC is normally:",a:["5 years","1 year","3 months","Unlimited"],correct:1,topic:"certificates"},
+{q:"What does ISM Code mainly cover?",a:["Safety Management","Cargo loading","Pilotage","Fishing operations"],correct:0,topic:"ism"},
+{q:"Company must hold under ISM:",a:["Document of Compliance","Certificate of Registry only","Crew List only","Loadline Plan"],correct:0,topic:"ism"},
+{q:"Ship must carry under ISM:",a:["SMC and copy of DOC","Only passport copies","Only crew contracts","Only port clearance"],correct:0,topic:"ism"},
+{q:"What does ISPS Code relate to?",a:["Security","Medical care","Pollution","Accommodation"],correct:0,topic:"isps"},
+{q:"Ship Security Plan for UK ships must be approved by:",a:["MCA","Port Agent","P&I Club","Charterer"],correct:0,topic:"isps"},
+{q:"SSAS is part of:",a:["ISPS Code","MLC","Load Line","COLREG"],correct:0,topic:"isps"},
+{q:"Minimum age to work onboard under MLC UK rules:",a:["14","15","16","18"],correct:2,topic:"mlc"},
+{q:"Young seafarers under 18 generally must not work:",a:["At night","On deck","In port","With officers"],correct:0,topic:"mlc"},
+{q:"Minimum notice period for SEA termination is normally:",a:["24 hours","3 days","7 days","1 month"],correct:2,topic:"mlc"},
+{q:"If SEA is not in English, what must be onboard?",a:["English translation","Extra crew list","New passport","Medical log"],correct:0,topic:"mlc"},
+{q:"Late payment of wages may attract interest of:",a:["5% per year","10% per year","20% per year","50% per year"],correct:2,topic:"mlc"},
+{q:"Crew accommodation inspection interval:",a:["Every 7 days","Every month","Every 6 months","Only drydock"],correct:0,topic:"mlc"},
+{q:"Food and drinking water inspection interval:",a:["Not less than once a week","Every day only","Every 3 months","Only after complaint"],correct:0,topic:"mlc"},
+{q:"Official Log Book drill entries must be signed by:",a:["Master and one crew member","Agent only","Cook only","Chief Engineer only"],correct:0,topic:"olb"},
+{q:"Steering gear must be tested:",a:["Within 12 hours before sailing","Once per year","Only in drydock","After arrival only"],correct:0,topic:"olb"},
+{q:"OLB normally closes:",a:["6 months after first entry","Every week","Every year","Only when sold"],correct:0,topic:"olb"},
+{q:"MAIB accident report should be sent within:",a:["24 hours","7 days","14 days","1 month"],correct:0,topic:"maib"},
+{q:"Serious injury report may be sent within:",a:["14 days","24 hours","6 months","1 year"],correct:0,topic:"maib"},
+{q:"Evidence after accident must be preserved for up to:",a:["28 days unless released","3 days","7 days","1 year always"],correct:0,topic:"maib"}
 ];
 
-let questionsBackup=[];
 let current=0;
 let score=0;
 let mistakes=[];
-let weakTopics={};
+
+function hideNext(){document.getElementById("nextBtn").style.display="none";}
+function showNext(){document.getElementById("nextBtn").style.display="block";}
+
+function backToMenu(){
+document.getElementById("quiz").style.display="none";
+document.getElementById("menu").style.display="block";
+showNext();
+}
 
 function startQuiz(){
-
+showNext();
 document.getElementById("menu").style.display="none";
-
 document.getElementById("quiz").style.display="block";
 current=Math.floor(Math.random()*questions.length);
-document.querySelector("button[onclick='nextQuestion()']").style.display="block";
 showQuestion();
-
 }
 
 function showQuestion(){
-
+showNext();
 document.getElementById("result").innerHTML="";
-
 let q=questions[current];
-
 document.getElementById("question").innerHTML=q.q;
-
 let html="";
-
 q.a.forEach((answer,index)=>{
-
-html+=`<button class='answer'
-onclick='check(${index})'>
-${answer}
-</button>`;
-
+html+=`<button class='answer' onclick='check(${index})'>${answer}</button>`;
 });
-
 document.getElementById("answers").innerHTML=html;
-
 }
 
 function check(answer){
-
 let q=questions[current];
-
 if(answer===q.correct){
-
 score++;
-
-document.getElementById("result").innerHTML=
-"✅ Correct | Score: "+score+"/"+questions.length;
-
+document.getElementById("result").innerHTML="✅ Correct | Score: "+score+"/"+questions.length;
 }else{
-
 mistakes.push(q.q);
-
-if(q.topic){
-
-if(!weakTopics[q.topic]){
-weakTopics[q.topic]=0;
+document.getElementById("result").innerHTML="❌ Wrong<br><br>Correct answer: "+q.a[q.correct]+"<br><br>Score: "+score+"/"+questions.length;
 }
-
-weakTopics[q.topic]++;
-
-}
-
-document.getElementById("result").innerHTML=
-"❌ Wrong<br><br>Correct answer: "
-+q.a[q.correct]+
-"<br><br>Score: "
-+score+"/"+questions.length;
-
-}
-
 }
 
 function nextQuestion(){
-
 current=Math.floor(Math.random()*questions.length);
-
 showQuestion();
-
 }
+
 function showMistakes(){
-
+hideNext();
 document.getElementById("menu").style.display="none";
 document.getElementById("quiz").style.display="block";
-
 document.getElementById("question").innerHTML="❌ Mistakes";
-
 if(mistakes.length===0){
-
-document.getElementById("answers").innerHTML=
-"<p>No mistakes yet ✅</p>";
-
+document.getElementById("answers").innerHTML="<p>No mistakes yet ✅</p>";
 }else{
-
 let html="";
-
-mistakes.forEach((m,i)=>{
-
-html+="<p>"+(i+1)+". "+m+"</p>";
-
-});
-
+mistakes.forEach((m,i)=>{html+="<p>"+(i+1)+". "+m+"</p>";});
 document.getElementById("answers").innerHTML=html;
-
 }
-
-document.getElementById("result").innerHTML="";
-
-}
-const oralQuestions=[
-{
-q:"Captain, explain the difference between Annual Survey and Renewal Survey.",
-key:["annual survey is general inspection","renewal survey leads to new certificate","checks condition and compliance"]
-},
-{
-q:"Captain, what does the ISM Code require from the company?",
-key:["safety management system","document of compliance","safety management certificate","emergency procedures"]
-},
-{
-q:"Captain, what is the purpose of the ISPS Code?",
-key:["ship security","prevent illegal acts","ship security plan","ship security assessment"]
-}
-];
-
-function startOral(){
-
-document.getElementById("menu").style.display="none";
-document.getElementById("quiz").style.display="block";
-
-let q=oralQuestions[Math.floor(Math.random()*oralQuestions.length)];
-
-document.getElementById("question").innerHTML=q.q;
-
-document.getElementById("answers").innerHTML=
-"<textarea id='oralAnswer' style='width:100%;height:140px;border-radius:12px;font-size:16px;padding:10px;'></textarea>"+
-"<button onclick='checkOral()'>Check My Answer</button>";
-
-window.currentOral=q;
-
 document.getElementById("result").innerHTML="";
 }
 
-function checkOral(){
-
-let answer=document.getElementById("oralAnswer").value.toLowerCase();
-let q=window.currentOral;
-let found=0;
-let missed=[];
-
-q.key.forEach(k=>{
-if(answer.includes(k.split(" ")[0])){
-found++;
-}else{
-missed.push(k);
-}
-});
-
-document.getElementById("result").innerHTML=
-"Score: "+found+"/"+q.key.length+
-"<br><br>Missed points:<br>"+missed.join("<br>");
-
-}
-const scenarios=[
-
-{
-title:"Missing Crew Member",
-question:"Crew member missing before departure. What actions would you take?",
-points:[
-"organize search teams",
-"inform company",
-"inform port authorities",
-"check safe manning",
-"change crew list",
-"arrange replacement crew"
-]
-},
-
-{
-title:"Fire in Engine Room",
-question:"Fire in engine room. Immediate actions?",
-points:[
-"general alarm",
-"muster station",
-"assess fire",
-"boundary cooling",
-"fire fighting",
-"inform involved parties"
-]
-},
-
-{
-title:"Oil Pollution",
-question:"Oil leak overboard. Actions?",
-points:[
-"stop operation",
-"assess leak",
-"activate sopep",
-"inform authorities",
-"contain pollution",
-"repair source"
-]
-}
-
-];
-
-function startScenario(){
-
-document.getElementById("menu").style.display="none";
-document.getElementById("quiz").style.display="block";
-
-let s=scenarios[Math.floor(Math.random()*scenarios.length)];
-
-window.currentScenario=s;
-
-document.getElementById("question").innerHTML=
-"🚨 "+s.title+"<br><br>"+s.question;
-
-document.getElementById("answers").innerHTML=
-"<textarea id='scenarioAnswer' style='width:100%;height:150px;border-radius:12px;padding:10px;'></textarea>"+
-"<button onclick='checkScenario()'>Submit</button>";
-
-document.getElementById("result").innerHTML="";
-}
-
-function checkScenario(){
-
-let answer=
-document.getElementById("scenarioAnswer")
-.value.toLowerCase();
-
-let s=window.currentScenario;
-
-let found=0;
-let missed=[];
-
-s.points.forEach(p=>{
-
-if(answer.includes(p.split(" ")[0])){
-
-found++;
-
-}else{
-
-missed.push(p);
-
-}
-
-});
-
-document.getElementById("result").innerHTML=
-"Score: "+found+"/"+s.points.length+
-"<br><br>Missing points:<br>"+
-missed.join("<br>");
-
-}
 function showProgress(){
-
+hideNext();
 document.getElementById("menu").style.display="none";
 document.getElementById("quiz").style.display="block";
-
 let percent=Math.round((score/questions.length)*100);
-
 document.getElementById("question").innerHTML="📊 Progress";
-
 document.getElementById("answers").innerHTML=
 "<p>Total Questions: "+questions.length+"</p>"+
 "<p>Current Score: "+score+"/"+questions.length+"</p>"+
 "<p>Progress: "+percent+"%</p>"+
-"<p>Mistakes: "+mistakes.length+"</p>"+
-"<button onclick='backToMenu()'>Back to Menu</button>";
-
+"<p>Mistakes: "+mistakes.length+"</p>";
 document.getElementById("result").innerHTML="";
-
 }
-
-function backToMenu(){
-
-document.getElementById("quiz").style.display="none";
-document.getElementById("menu").style.display="block";
-
-}
- let examMode=false;
-let examQuestions=[];
-let examIndex=0;
 
 function startExam(){
-
-examMode=true;
-
+hideNext();
 score=0;
-
-examIndex=0;
-
-examQuestions=[...questions]
-.sort(()=>0.5-Math.random())
-.slice(0,10);
-
+let examQuestions=[...questions].sort(()=>0.5-Math.random()).slice(0,10);
+let examIndex=0;
 document.getElementById("menu").style.display="none";
-
 document.getElementById("quiz").style.display="block";
 
-showExamQuestion();
-
-}
-
-function showExamQuestion(){
-
-document.getElementById("result").innerHTML="";
-
+function showExam(){
 let q=examQuestions[examIndex];
-
-document.getElementById("question").innerHTML=
-"Question "+(examIndex+1)+"/10<br><br>"+q.q;
-
+document.getElementById("result").innerHTML="";
+document.getElementById("question").innerHTML="Question "+(examIndex+1)+"/10<br><br>"+q.q;
 let html="";
-
 q.a.forEach((answer,index)=>{
-
-html+=`<button class='answer'
-onclick='checkExam(${index})'>
-${answer}
-</button>`;
-
+html+=`<button class='answer' onclick='checkExam(${index})'>${answer}</button>`;
 });
-
 document.getElementById("answers").innerHTML=html;
-
 }
 
-function checkExam(answer){
-
+window.checkExam=function(answer){
 let q=examQuestions[examIndex];
-
-if(answer===q.correct){
-
-score++;
-
-}
-
+if(answer===q.correct){score++;}
+else{mistakes.push(q.q);}
 examIndex++;
-
 if(examIndex>=examQuestions.length){
-
-document.getElementById("question").innerHTML=
-"🎓 Exam Finished";
-
-document.getElementById("answers").innerHTML=
-"<h2>Score: "+score+"/10</h2>";
-
+document.getElementById("question").innerHTML="🎓 Exam Finished";
+document.getElementById("answers").innerHTML="<h2>Score: "+score+"/10</h2>";
 document.getElementById("result").innerHTML="";
-
 return;
-
+}
+showExam();
+}
+showExam();
 }
 
-showExamQuestion();
+const oralQuestions=[
+{q:"Captain, explain the difference between Annual Survey and Renewal Survey.",key:["annual","renewal","certificate"]},
+{q:"Captain, what does the ISM Code require from the company?",key:["safety","management","doc","smc"]},
+{q:"Captain, what is the purpose of the ISPS Code?",key:["security","ship","plan","assessment"]}
+];
 
-} 
-function showStudy(){
-
+function startOral(){
+hideNext();
 document.getElementById("menu").style.display="none";
 document.getElementById("quiz").style.display="block";
+let q=oralQuestions[Math.floor(Math.random()*oralQuestions.length)];
+window.currentOral=q;
+document.getElementById("question").innerHTML=q.q;
+document.getElementById("answers").innerHTML="<textarea id='oralAnswer'></textarea><button onclick='checkOral()'>Check My Answer</button>";
+document.getElementById("result").innerHTML="";
+}
 
+function checkOral(){
+let answer=document.getElementById("oralAnswer").value.toLowerCase();
+let q=window.currentOral;
+let found=0;
+let missed=[];
+q.key.forEach(k=>{
+if(answer.includes(k)){found++;}else{missed.push(k);}
+});
+document.getElementById("result").innerHTML="Score: "+found+"/"+q.key.length+"<br><br>Missed points:<br>"+missed.join("<br>");
+}
+
+const scenarios=[
+{title:"Missing Crew Member",question:"Crew member missing before departure. What actions would you take?",points:["search","company","port","safe manning","crew list","replacement"]},
+{title:"Fire in Engine Room",question:"Fire in engine room. Immediate actions?",points:["alarm","muster","assess","boundary cooling","fire fighting","inform"]},
+{title:"Oil Pollution",question:"Oil leak overboard. Actions?",points:["stop","assess","sopep","inform","contain","repair"]}
+];
+
+function startScenario(){
+hideNext();
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
+let s=scenarios[Math.floor(Math.random()*scenarios.length)];
+window.currentScenario=s;
+document.getElementById("question").innerHTML="🚨 "+s.title+"<br><br>"+s.question;
+document.getElementById("answers").innerHTML="<textarea id='scenarioAnswer'></textarea><button onclick='checkScenario()'>Submit</button>";
+document.getElementById("result").innerHTML="";
+}
+
+function checkScenario(){
+let answer=document.getElementById("scenarioAnswer").value.toLowerCase();
+let s=window.currentScenario;
+let found=0;
+let missed=[];
+s.points.forEach(p=>{
+if(answer.includes(p)){found++;}else{missed.push(p);}
+});
+document.getElementById("result").innerHTML="Score: "+found+"/"+s.points.length+"<br><br>Missing points:<br>"+missed.join("<br>");
+}
+
+const studyData={
+surveys:[
+"HSSC has 7 survey types: Initial, Periodical, Renewal, Intermediate, Annual, Bottom Inspection and Additional Survey.",
+"Initial Survey is a complete inspection before the ship enters service.",
+"Renewal Survey is similar to periodical survey but leads to a new certificate.",
+"Annual Survey is a general inspection to confirm the ship remains satisfactory.",
+"Additional Survey is carried out after important repairs or renewals."
+],
+ism:[
+"ISM Code means International Safety Management Code.",
+"Purpose: safe operation of ships and pollution prevention.",
+"The company must hold a Document of Compliance.",
+"The ship must hold a Safety Management Certificate.",
+"The master must operate the ship according to the Safety Management System."
+],
+isps:[
+"ISPS Code relates to maritime security.",
+"Purpose: prevent unlawful acts against ships, crew and passengers.",
+"Every ship/company must have a Ship Security Plan.",
+"Ship Security Assessment supports the Ship Security Plan.",
+"SSAS is a covert alert system under ISPS."
+],
+mlc:[
+"MLC protects seafarers' working and living conditions.",
+"Minimum age is generally 16 years.",
+"Young persons under 18 are generally restricted from night work.",
+"MLC covers SEA, wages, repatriation, food, accommodation and medical care.",
+"If SEA is not in English, an English translation must be held onboard."
+],
+maib:[
+"MAIB means Marine Accident Investigation Branch.",
+"Reportable accidents should be reported by quickest means, normally within 24 hours.",
+"Serious injuries may be reported within 14 days.",
+"Evidence must be preserved after an accident.",
+"IRF can be used to report or amplify accident information."
+]
+};
+
+let currentTopic="";
+let currentSlide=0;
+
+function showStudy(){
+hideNext();
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
 document.getElementById("question").innerHTML="📚 Study Mode";
-
 document.getElementById("answers").innerHTML=
 "<button onclick='studyTopic(\"surveys\")'>Surveys & Certificates</button>"+
 "<button onclick='studyTopic(\"ism\")'>ISM Code</button>"+
 "<button onclick='studyTopic(\"isps\")'>ISPS Code</button>"+
 "<button onclick='studyTopic(\"mlc\")'>MLC</button>"+
 "<button onclick='studyTopic(\"maib\")'>MAIB Reporting</button>";
-
 document.getElementById("result").innerHTML="";
-
 }
 
 function studyTopic(topic){
-
 currentTopic=topic;
-
 currentSlide=0;
-
 showSlide();
-
 }
 
 function showSlide(){
-
+hideNext();
 let slides=studyData[currentTopic];
-
-document.getElementById("question").innerHTML=
-"📚 "+
-currentTopic.toUpperCase()+
-"<br><br>Slide "+
-(currentSlide+1)+
-"/"+
-slides.length;
-
+document.getElementById("question").innerHTML="📚 "+currentTopic.toUpperCase()+"<br><br>Slide "+(currentSlide+1)+"/"+slides.length;
 document.getElementById("answers").innerHTML=
-
 "<p>"+slides[currentSlide]+"</p>"+
-
 "<button onclick='prevSlide()'>⬅ Previous</button>"+
-
 "<button onclick='nextSlide()'>Next ➡</button>";
-
-}
-
-function nextSlide(){
-
-if(currentSlide<studyData[currentTopic].length-1){
-
-currentSlide++;
-
-showSlide();
-
-}
-
-}
-
-function prevSlide(){
-
-if(currentSlide>0){
-
-currentSlide--;
-
-showSlide();
-
-}
-
-}}
-
-function showSlide(){
-
-...
-
-}
-
-function nextSlide(){
-
-...
-
-}
-
-function prevSlide(){
-
-...
-
-} 
-function showThemeTests(){
-
-document.getElementById("menu").style.display="none";
-document.getElementById("quiz").style.display="block";
-
-document.getElementById("question").innerHTML="🧩 Theme Tests";
-
-document.getElementById("answers").innerHTML=
-"<button onclick='startTheme(\"survey\")'>Surveys</button>"+
-"<button onclick='startTheme(\"ism\")'>ISM</button>"+
-"<button onclick='startTheme(\"isps\")'>ISPS</button>"+
-"<button onclick='startTheme(\"mlc\")'>MLC</button>"+
-"<button onclick='startTheme(\"maib\")'>MAIB</button>";
-
 document.getElementById("result").innerHTML="";
 }
 
-function startTheme(theme){
-
-let filtered=questions.filter(q=>q.topic===theme);
-
-if(filtered.length===0){
-document.getElementById("question").innerHTML="No questions yet";
-document.getElementById("answers").innerHTML="";
-return;
+function nextSlide(){
+if(currentSlide<studyData[currentTopic].length-1){
+currentSlide++;
+showSlide();
+}
 }
 
-questionsBackup=questions;
-questions=filtered;
-current=Math.floor(Math.random()*questions.length);
-showQuestion();
-
-} 
-let studyData={
-
-surveys:[
-"HSSC has 7 survey types: Initial, Periodical, Renewal, Intermediate, Annual, Bottom Inspection and Additional Survey.",
-
-"Renewal Survey issues a new certificate. Annual Survey checks condition and validity.",
-
-"Initial Survey is carried out before entering service.",
-
-"Intermediate Survey usually takes place between the second and third anniversary date.",
-
-"UKFSE exam tip: Renewal = new certificate."
-],
-
-ism:[
-
-"ISM Code = International Safety Management Code.",
-
-"Purpose: ensure safety at sea and pollution prevention.",
-
-"Company requires Document of Compliance (DOC).",
-
-"Ship requires Safety Management Certificate (SMC).",
-
-"SMS includes emergency procedures, drills and internal audits."
-],
-
-isps:[
-
-"ISPS = International Ship and Port Facility Security Code.",
-
-"Purpose: prevent unlawful acts against ships.",
-
-"Main documents: SSP and SSA.",
-
-"Ship Security Alert System sends covert alerts.",
-
-"Security levels: 1, 2 and 3."
-],
-
-mlc:[
-
-"MLC protects seafarers working and living conditions.",
-
-"Minimum age generally 16.",
-
-"Young persons under 18 have restrictions.",
-
-"MLC covers food, accommodation and wages.",
-
-"Seafarers have rights to medical care and repatriation."
-]
-
-};
-
-let currentSlide=0;
-let currentTopic="";
+function prevSlide(){
+if(currentSlide>0){
+currentSlide--;
+showSlide();
+}
+}
 </script>
 
 </body>
