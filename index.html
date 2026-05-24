@@ -47,6 +47,7 @@ background:#30363d;
 
 <h2>Choose Mode</h2>
 
+<button onclick="showStudy()">📚 Study Mode</button>
 <button onclick="startQuiz()">⚡ Quick Test</button>
 <button onclick="startExam()">🎓 Full Exam</button>
 <button onclick="startScenario()">🚨 Emergency Scenarios</button>
@@ -454,6 +455,54 @@ return;
 
 showExamQuestion();
 
+} 
+function showStudy(){
+
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
+
+document.getElementById("question").innerHTML="📚 Study Mode";
+
+document.getElementById("answers").innerHTML=
+"<button onclick='studyTopic(\"surveys\")'>Surveys & Certificates</button>"+
+"<button onclick='studyTopic(\"ism\")'>ISM Code</button>"+
+"<button onclick='studyTopic(\"isps\")'>ISPS Code</button>"+
+"<button onclick='studyTopic(\"mlc\")'>MLC</button>"+
+"<button onclick='studyTopic(\"maib\")'>MAIB Reporting</button>";
+
+document.getElementById("result").innerHTML="";
+
+}
+
+function studyTopic(topic){
+
+let text="";
+
+if(topic==="surveys"){
+text="HSSC has 7 survey types: Initial, Periodical, Renewal, Intermediate, Annual, Bottom Inspection and Additional Survey. Renewal survey leads to a new certificate.";
+}
+
+if(topic==="ism"){
+text="ISM Code requires a Safety Management System, Document of Compliance for the company, Safety Management Certificate for the ship, emergency procedures and internal audits.";
+}
+
+if(topic==="isps"){
+text="ISPS Code relates to ship and port facility security. Key documents include Ship Security Plan, Ship Security Assessment and Ship Security Alert System.";
+}
+
+if(topic==="mlc"){
+text="MLC covers seafarer employment, wages, repatriation, medical care, food, accommodation, minimum age and working/living conditions.";
+}
+
+if(topic==="maib"){
+text="Accidents must be reported to MAIB by the quickest means available, normally within 24 hours. Evidence must be preserved.";
+}
+
+document.getElementById("question").innerHTML="📚 "+topic.toUpperCase();
+
+document.getElementById("answers").innerHTML="<p>"+text+"</p>";
+
+document.getElementById("result").innerHTML="";
 } 
 </script>
 
