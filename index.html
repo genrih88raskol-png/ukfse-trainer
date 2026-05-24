@@ -48,7 +48,7 @@ background:#30363d;
 <h2>Choose Mode</h2>
 
 <button onclick="startQuiz()">⚡ Quick Test</button>
-<button onclick="startOral()">🎤 Oral Exam</button>
+<button onclick="startExam()">🎓 Full Exam</button>
 <button onclick="startScenario()">🚨 Emergency Scenarios</button>
 <button onclick="showProgress()">📊 Progress</button>
 <button onclick="showMistakes()">❌ Mistakes</button>
@@ -378,6 +378,83 @@ document.getElementById("quiz").style.display="none";
 document.getElementById("menu").style.display="block";
 
 }
+ let examMode=false;
+let examQuestions=[];
+let examIndex=0;
+
+function startExam(){
+
+examMode=true;
+
+score=0;
+
+examIndex=0;
+
+examQuestions=[...questions]
+.sort(()=>0.5-Math.random())
+.slice(0,10);
+
+document.getElementById("menu").style.display="none";
+
+document.getElementById("quiz").style.display="block";
+
+showExamQuestion();
+
+}
+
+function showExamQuestion(){
+
+document.getElementById("result").innerHTML="";
+
+let q=examQuestions[examIndex];
+
+document.getElementById("question").innerHTML=
+"Question "+(examIndex+1)+"/10<br><br>"+q.q;
+
+let html="";
+
+q.a.forEach((answer,index)=>{
+
+html+=`<button class='answer'
+onclick='checkExam(${index})'>
+${answer}
+</button>`;
+
+});
+
+document.getElementById("answers").innerHTML=html;
+
+}
+
+function checkExam(answer){
+
+let q=examQuestions[examIndex];
+
+if(answer===q.correct){
+
+score++;
+
+}
+
+examIndex++;
+
+if(examIndex>=examQuestions.length){
+
+document.getElementById("question").innerHTML=
+"🎓 Exam Finished";
+
+document.getElementById("answers").innerHTML=
+"<h2>Score: "+score+"/10</h2>";
+
+document.getElementById("result").innerHTML="";
+
+return;
+
+}
+
+showExamQuestion();
+
+} 
 </script>
 
 </body>
