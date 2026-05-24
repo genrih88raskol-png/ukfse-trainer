@@ -489,35 +489,77 @@ document.getElementById("result").innerHTML="";
 }
 
 function studyTopic(topic){
-document.querySelector("button[onclick='nextQuestion()']").style.display="none";
 
-let text="";
+currentTopic=topic;
 
-if(topic==="surveys"){
-text="HSSC has 7 survey types: Initial, Periodical, Renewal, Intermediate, Annual, Bottom Inspection and Additional Survey. Renewal survey leads to a new certificate.";
+currentSlide=0;
+
+showSlide();
+
 }
 
-if(topic==="ism"){
-text="ISM Code requires a Safety Management System, Document of Compliance for the company, Safety Management Certificate for the ship, emergency procedures and internal audits.";
+function showSlide(){
+
+let slides=studyData[currentTopic];
+
+document.getElementById("question").innerHTML=
+"📚 "+
+currentTopic.toUpperCase()+
+"<br><br>Slide "+
+(currentSlide+1)+
+"/"+
+slides.length;
+
+document.getElementById("answers").innerHTML=
+
+"<p>"+slides[currentSlide]+"</p>"+
+
+"<button onclick='prevSlide()'>⬅ Previous</button>"+
+
+"<button onclick='nextSlide()'>Next ➡</button>";
+
 }
 
-if(topic==="isps"){
-text="ISPS Code relates to ship and port facility security. Key documents include Ship Security Plan, Ship Security Assessment and Ship Security Alert System.";
+function nextSlide(){
+
+if(currentSlide<studyData[currentTopic].length-1){
+
+currentSlide++;
+
+showSlide();
+
 }
 
-if(topic==="mlc"){
-text="MLC covers seafarer employment, wages, repatriation, medical care, food, accommodation, minimum age and working/living conditions.";
 }
 
-if(topic==="maib"){
-text="Accidents must be reported to MAIB by the quickest means available, normally within 24 hours. Evidence must be preserved.";
+function prevSlide(){
+
+if(currentSlide>0){
+
+currentSlide--;
+
+showSlide();
+
 }
 
-document.getElementById("question").innerHTML="📚 "+topic.toUpperCase();
+}}
 
-document.getElementById("answers").innerHTML="<p>"+text+"</p>";
+function showSlide(){
 
-document.getElementById("result").innerHTML="";
+...
+
+}
+
+function nextSlide(){
+
+...
+
+}
+
+function prevSlide(){
+
+...
+
 } 
 function showThemeTests(){
 
@@ -552,6 +594,63 @@ current=Math.floor(Math.random()*questions.length);
 showQuestion();
 
 } 
+let studyData={
+
+surveys:[
+"HSSC has 7 survey types: Initial, Periodical, Renewal, Intermediate, Annual, Bottom Inspection and Additional Survey.",
+
+"Renewal Survey issues a new certificate. Annual Survey checks condition and validity.",
+
+"Initial Survey is carried out before entering service.",
+
+"Intermediate Survey usually takes place between the second and third anniversary date.",
+
+"UKFSE exam tip: Renewal = new certificate."
+],
+
+ism:[
+
+"ISM Code = International Safety Management Code.",
+
+"Purpose: ensure safety at sea and pollution prevention.",
+
+"Company requires Document of Compliance (DOC).",
+
+"Ship requires Safety Management Certificate (SMC).",
+
+"SMS includes emergency procedures, drills and internal audits."
+],
+
+isps:[
+
+"ISPS = International Ship and Port Facility Security Code.",
+
+"Purpose: prevent unlawful acts against ships.",
+
+"Main documents: SSP and SSA.",
+
+"Ship Security Alert System sends covert alerts.",
+
+"Security levels: 1, 2 and 3."
+],
+
+mlc:[
+
+"MLC protects seafarers working and living conditions.",
+
+"Minimum age generally 16.",
+
+"Young persons under 18 have restrictions.",
+
+"MLC covers food, accommodation and wages.",
+
+"Seafarers have rights to medical care and repatriation."
+]
+
+};
+
+let currentSlide=0;
+let currentTopic="";
 </script>
 
 </body>
