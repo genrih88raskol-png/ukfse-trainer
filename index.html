@@ -48,7 +48,7 @@ background:#30363d;
 <h2>Choose Mode</h2>
 
 <button onclick="startQuiz()">⚡ Quick Test</button>
-<button>🎤 Oral Exam</button>
+<button onclick="startOral()">🎤 Oral Exam</button>
 <button>🚨 Emergency Scenarios</button>
 <button>📊 Progress</button>
 <button onclick="showMistakes()">❌ Mistakes</button>
@@ -258,6 +258,59 @@ document.getElementById("answers").innerHTML=html;
 }
 
 document.getElementById("result").innerHTML="";
+
+}
+const oralQuestions=[
+{
+q:"Captain, explain the difference between Annual Survey and Renewal Survey.",
+key:["annual survey is general inspection","renewal survey leads to new certificate","checks condition and compliance"]
+},
+{
+q:"Captain, what does the ISM Code require from the company?",
+key:["safety management system","document of compliance","safety management certificate","emergency procedures"]
+},
+{
+q:"Captain, what is the purpose of the ISPS Code?",
+key:["ship security","prevent illegal acts","ship security plan","ship security assessment"]
+}
+];
+
+function startOral(){
+
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
+
+let q=oralQuestions[Math.floor(Math.random()*oralQuestions.length)];
+
+document.getElementById("question").innerHTML=q.q;
+
+document.getElementById("answers").innerHTML=
+"<textarea id='oralAnswer' style='width:100%;height:140px;border-radius:12px;font-size:16px;padding:10px;'></textarea>"+
+"<button onclick='checkOral()'>Check My Answer</button>";
+
+window.currentOral=q;
+
+document.getElementById("result").innerHTML="";
+}
+
+function checkOral(){
+
+let answer=document.getElementById("oralAnswer").value.toLowerCase();
+let q=window.currentOral;
+let found=0;
+let missed=[];
+
+q.key.forEach(k=>{
+if(answer.includes(k.split(" ")[0])){
+found++;
+}else{
+missed.push(k);
+}
+});
+
+document.getElementById("result").innerHTML=
+"Score: "+found+"/"+q.key.length+
+"<br><br>Missed points:<br>"+missed.join("<br>");
 
 }
 </script>
