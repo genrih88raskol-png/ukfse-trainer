@@ -117,7 +117,7 @@ function startQuiz(){
 document.getElementById("menu").style.display="none";
 
 document.getElementById("quiz").style.display="block";
-
+current=Math.floor(Math.random()*questions.length);
 showQuestion();
 
 }
@@ -172,13 +172,7 @@ document.getElementById("result").innerHTML=
 
 function nextQuestion(){
 
-current++;
-
-if(current>=questions.length){
-
-current=0;
-
-}
+current=Math.floor(Math.random()*questions.length);
 
 showQuestion();
 
