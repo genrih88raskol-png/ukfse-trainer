@@ -47,7 +47,7 @@ background:#30363d;
 
 <h2>Choose Mode</h2>
 
-<button onclick="showThemeTests()">🧩 Theme Tests</button>
+
 <button onclick="showStudy()">📚 Study Mode</button>
 <button onclick="startQuiz()">⚡ Quick Test</button>
 <button onclick="startExam()">🎓 Full Exam</button>
@@ -122,6 +122,7 @@ document.getElementById("menu").style.display="none";
 
 document.getElementById("quiz").style.display="block";
 current=Math.floor(Math.random()*questions.length);
+document.querySelector("button[onclick='nextQuestion()']").style.display="block";
 showQuestion();
 
 }
@@ -488,6 +489,7 @@ document.getElementById("result").innerHTML="";
 }
 
 function studyTopic(topic){
+document.querySelector("button[onclick='nextQuestion()']").style.display="none";
 
 let text="";
 
