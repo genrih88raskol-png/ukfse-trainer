@@ -50,7 +50,7 @@ background:#30363d;
 <button onclick="startQuiz()">⚡ Quick Test</button>
 <button onclick="startOral()">🎤 Oral Exam</button>
 <button onclick="startScenario()">🚨 Emergency Scenarios</button>
-<button>📊 Progress</button>
+<button onclick="showProgress()">📊 Progress</button>
 <button onclick="showMistakes()">❌ Mistakes</button>
 
 </div>
@@ -404,6 +404,32 @@ document.getElementById("result").innerHTML=
 "Score: "+found+"/"+s.points.length+
 "<br><br>Missing points:<br>"+
 missed.join("<br>");
+
+}
+function showProgress(){
+
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
+
+let percent=Math.round((score/questions.length)*100);
+
+document.getElementById("question").innerHTML="📊 Progress";
+
+document.getElementById("answers").innerHTML=
+"<p>Total Questions: "+questions.length+"</p>"+
+"<p>Current Score: "+score+"/"+questions.length+"</p>"+
+"<p>Progress: "+percent+"%</p>"+
+"<p>Mistakes: "+mistakes.length+"</p>"+
+"<button onclick='backToMenu()'>Back to Menu</button>";
+
+document.getElementById("result").innerHTML="";
+
+}
+
+function backToMenu(){
+
+document.getElementById("quiz").style.display="none";
+document.getElementById("menu").style.display="block";
 
 }
 </script>
