@@ -505,13 +505,24 @@ const scenarios=[
 let current=0, score=0, mistakes=[], currentTopic="", currentSlide=0;
 let questionQueue=[];
 let queueIndex=0;
-
+let answered=false;
+let quizFinished=false;
+let quizAnsweredCount=0;
+let quizScore=0;
+  
 function hideNext(){document.getElementById("nextBtn").style.display="none";}
 function showNext(){document.getElementById("nextBtn").style.display="block";}
 function backToMenu(){document.getElementById("quiz").style.display="none";document.getElementById("menu").style.display="block";showNext();}
 
 function startQuiz(){
 showNext();
+
+score=0;
+quizScore=0;
+quizAnsweredCount=0;
+answered=false;
+quizFinished=false;
+
 document.getElementById("menu").style.display="none";
 document.getElementById("quiz").style.display="block";
 
@@ -521,8 +532,35 @@ current=questions.indexOf(questionQueue[queueIndex]);
 
 showQuestion();
 }
-function showQuestion(){showNext();document.getElementById("result").innerHTML="";let q=questions[current];document.getElementById("question").innerHTML=q.topic+"<br><br>"+q.q;let html="";q.a.forEach((answer,index)=>{html+=`<button class='answer' onclick='check(${index})'>${answer}</button>`;});document.getElementById("answers").innerHTML=html;}
-function check(answer){let q=questions[current];if(answer===q.correct){score++;document.getElementById("result").innerHTML="✅ Correct | Score: "+score+"/"+questions.length;}else{mistakes.push(q.topic+": "+q.q);document.getElementById("result").innerHTML="❌ Wrong<br><br>Correct answer: "+q.a[q.correct]+"<br><br>Score: "+score+"/"+questions.length;}}
+}
+function showQuestion()answered=false;{showNext();document.getElementById("result").innerHTML="";let q=questions[current];document.getElementById("question").innerHTML=q.topic+"<br><br>"+q.q;let html="";q.a.forEach((answer,index)=>{html+=`<button class='answer' onclick='check(${index})'>${answer}</button>`;});document.getElementById("answers").innerHTML=html;}
+function check(answer){
+
+if(answered){return;}
+
+answered=true;
+
+let q=questions[current];
+
+document.querySelectorAll(".answer").forEach(btn=>{
+btn.disabled=true;
+btn.style.opacity="0.6";
+});
+
+if(answer===q.correct){
+score++;
+quizScore++;
+document.getElementById("result").innerHTML=
+"✅ Correct | Score: "+quizScore+"/"+questionQueue.length;
+}else{
+mistakes.push(q.topic+": "+q.q);
+document.getElementById("result").innerHTML=
+"❌ Wrong<br><br>Correct answer: "+q.a[q.correct]+"<br><br>Score: "+quizScore+"/"+questionQueue.length;
+}
+
+quizAnsweredCount++;
+
+}
 function nextQuestion(){
 queueIndex++;
 
