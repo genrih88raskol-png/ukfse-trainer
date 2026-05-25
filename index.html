@@ -80,10 +80,112 @@ p,li{font-size:17px;line-height:1.45;text-align:left;}
 .progressbar{width:100%;height:12px;background:#30363d;border-radius:999px;overflow:hidden;margin:12px 0;}
 .progressfill{height:100%;background:var(--green2);width:0%;}
 pre{white-space:pre-wrap;text-align:left;background:#0d1117;padding:12px;border-radius:12px;color:var(--muted);}
+.heroBanner{
+height:260px;
+
+background:
+linear-gradient(
+rgba(0,0,30,.55),
+rgba(0,20,50,.85)
+),
+
+url("captain1.jpg");
+
+background-size:cover;
+background-position:center;
+
+border-radius:25px;
+
+margin-bottom:20px;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+box-shadow:
+0 0 25px rgba(0,150,255,.3);
+
+}
+
+.heroContent{
+
+backdrop-filter:blur(10px);
+
+padding:20px;
+
+border-radius:20px;
+
+background:rgba(0,0,0,.35);
+
+text-align:center;
+
+}
+
+.creatorTitle{
+
+font-size:38px;
+font-weight:bold;
+color:#58a6ff;
+
+}
+
+.creatorText{
+
+font-size:18px;
+margin-top:10px;
+
+}
+
+.linkedinBtn{
+
+display:inline-block;
+
+margin-top:15px;
+
+padding:14px 22px;
+
+border-radius:15px;
+
+background:#0077b5;
+
+color:white;
+
+text-decoration:none;
+
+font-weight:bold;
+
+}
 </style>
 </head>
 
 <body>
+<div class="heroBanner">
+
+<div class="heroContent">
+
+<div class="creatorTitle">
+
+⚓ UKFSE Trainer
+
+</div>
+
+<div class="creatorText">
+
+Created by Captain Kyrylo Tkachenko
+
+</div>
+
+<a class="linkedinBtn"
+href="https://www.linkedin.com/in/captain-kyrylo-tkachenko/"
+target="_blank">
+
+Follow on LinkedIn
+
+</a>
+
+</div>
+
+</div>  
 <h1>UKFSE Trainer</h1>
 
 <div class="card" id="menu">
