@@ -31,6 +31,41 @@ body{
   padding:16px;
   text-align:center;
 }
+.captainHeader{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:30px;
+margin-top:30px;
+margin-bottom:30px;
+flex-wrap:wrap;
+}
+
+.captainPhoto img{
+width:180px;
+height:180px;
+border-radius:50%;
+object-fit:cover;
+border:4px solid #58a6ff;
+box-shadow:0 0 25px rgba(88,166,255,.8);
+}
+
+.patch img{
+width:100px;
+filter:drop-shadow(0 0 10px gold);
+transition:.4s;
+}
+
+.patch img:hover{
+transform:scale(1.1) rotate(8deg);
+}
+
+.captainText{
+font-size:22px;
+font-weight:bold;
+color:#7dd3fc;
+margin-top:15px;
+}  
 .heroBanner{
   min-height:280px;
   background:
@@ -197,6 +232,25 @@ p{
 </div>
 
 <div class="card" id="menu">
+<div class="captainHeader">
+
+<div class="patch">
+<img src="pATCH%201.jpg">
+</div>
+
+<div class="captainPhoto">
+<img src="captain%203.jpg">
+</div>
+
+<div class="patch">
+<img src="PATCH%202.jpg">
+</div>
+
+</div>
+
+<div class="captainText">
+⚓ Captain Kyrylo Tkachenko
+</div>
 <h2>Choose Mode</h2>
 <button onclick="showStudy()">📚 Study Mode</button>
 <button onclick="startQuiz()">⚡ Quick Test</button>
