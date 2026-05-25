@@ -6,502 +6,110 @@
 <title>UKFSE Trainer by Captain Tkachenko</title>
 <style>
 :root{
-  --navy:#06101f; --navy2:#0b1c33; --panel:rgba(9,22,43,.86);
-  --blue:#58a6ff; --cyan:#7dd3fc; --gold:#facc15; --white:#f8fafc;
-  --muted:#cbd5e1; --green:#238636; --red:#ef4444;
+  --bg:#04111f;--panel:#071b31;--panel2:rgba(7,27,49,.88);--text:#f4f8ff;--muted:#b9c8d8;--blue:#1d8bd6;--blue2:#0c5f9d;--gold:#f7c948;--danger:#e8505b;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  color:var(--white);
-  background:
-    radial-gradient(circle at 20% 10%,rgba(88,166,255,.22),transparent 28%),
-    radial-gradient(circle at 85% 0%,rgba(250,204,21,.12),transparent 28%),
-    linear-gradient(135deg,#020617 0%,#07152b 42%,#0b1f3d 100%);
-  min-height:100vh;
-}
-body:before{
-  content:"";
-  position:fixed; inset:0; z-index:-2;
-  background:
-    linear-gradient(rgba(2,6,23,.72),rgba(2,6,23,.88)),
-    url("captain 3.jpg");
-  background-size:cover;
-  background-position:center 22%;
-  opacity:.32;
-}
-body:after{
-  content:"";
-  position:fixed; inset:0; z-index:-1;
-  background:
-    repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 2px,transparent 2px 12px),
-    linear-gradient(90deg,rgba(255,255,255,.03),transparent 25%,transparent 75%,rgba(255,255,255,.03));
-  pointer-events:none;
-}
-.app{
-  width:min(1180px,100%);
-  margin:0 auto;
-  padding:clamp(14px,2.5vw,32px);
-}
-.hero{
-  min-height:92vh;
-  display:grid;
-  align-items:center;
-  gap:22px;
-}
-.brandPanel{
-  width:min(980px,100%);
-  margin:0 auto;
-  padding:clamp(22px,4vw,42px);
-  border:1px solid rgba(125,211,252,.28);
-  border-radius:34px;
-  background:
-    linear-gradient(145deg,rgba(8,18,35,.9),rgba(10,34,65,.78)),
-    radial-gradient(circle at 20% 0%,rgba(88,166,255,.20),transparent 38%);
-  box-shadow:0 28px 80px rgba(0,0,0,.55), inset 0 1px rgba(255,255,255,.10);
-  backdrop-filter:blur(14px);
-  overflow:hidden;
-  position:relative;
-}
-.brandPanel:before{
-  content:"";
-  position:absolute; inset:0;
-  background:
-    linear-gradient(120deg,transparent 0 12%,rgba(255,255,255,.07) 12% 13%,transparent 13% 26%),
-    radial-gradient(circle at 50% -30%,rgba(250,204,21,.12),transparent 40%);
-  pointer-events:none;
-}
-.identity{
-  position:relative;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:clamp(18px,4vw,48px);
-  flex-wrap:wrap;
-  margin-bottom:24px;
-}
-.patches{
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-.patchImg{
-  width:clamp(80px,11vw,124px);
-  height:clamp(80px,11vw,124px);
-  object-fit:contain;
-  filter:drop-shadow(0 0 18px rgba(250,204,21,.45));
-}
-.captainPortrait{
-  width:clamp(145px,20vw,230px);
-  height:clamp(145px,20vw,230px);
-  border-radius:50%;
-  object-fit:cover;
-  border:5px solid rgba(88,166,255,.95);
-  box-shadow:0 0 34px rgba(88,166,255,.55),0 20px 55px rgba(0,0,0,.50);
-}
-.titleBlock{text-align:center; position:relative}
-.titleBlock h1{
-  margin:0;
-  font-size:clamp(36px,6vw,76px);
-  letter-spacing:.5px;
-  color:#eaf6ff;
-  text-shadow:0 0 28px rgba(88,166,255,.55);
-}
-.titleBlock h2{
-  margin:10px 0 0;
-  font-size:clamp(18px,2.4vw,30px);
-  color:var(--cyan);
-}
-.titleBlock p{margin:10px auto; text-align:center; color:var(--muted); max-width:720px}
-.linkedin{
-  display:inline-block;
-  margin-top:12px;
-  padding:14px 24px;
-  border-radius:999px;
-  background:linear-gradient(135deg,#0a66c2,#1395dc);
-  color:white; text-decoration:none; font-weight:800;
-  box-shadow:0 10px 25px rgba(10,102,194,.35);
-}
-.menuCard,.screenCard{
-  width:min(980px,100%);
-  margin:22px auto 0;
-  padding:clamp(18px,3vw,34px);
-  border-radius:30px;
-  border:1px solid rgba(125,211,252,.25);
-  background:rgba(8,19,37,.82);
-  box-shadow:0 24px 70px rgba(0,0,0,.46);
-  backdrop-filter:blur(12px);
-}
-.menuCard h2,.screenCard h2{margin-top:0;text-align:center}
-.menuGrid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
-}
-button{
-  appearance:none;
-  border:0;
-  border-radius:18px;
-  padding:16px 18px;
-  font-size:18px;
-  font-weight:850;
-  color:white;
-  background:linear-gradient(135deg,rgba(23,93,160,.96),rgba(15,118,180,.92));
-  box-shadow:0 10px 24px rgba(0,0,0,.28), inset 0 1px rgba(255,255,255,.13);
-  cursor:pointer;
-  transition:.18s ease;
-}
-button:hover{transform:translateY(-2px);filter:brightness(1.08)}
-button:disabled{opacity:.55;cursor:not-allowed;transform:none}
-button.secondary{background:rgba(30,41,59,.88);border:1px solid rgba(255,255,255,.14)}
-button.danger{background:linear-gradient(135deg,#b91c1c,#ef4444)}
-.answer{display:block;width:100%;margin:10px 0;background:rgba(15,23,42,.88);border:1px solid rgba(148,163,184,.25)}
-.answer.correct{border-color:#22c55e;background:rgba(34,197,94,.18)}
-.answer.wrong{border-color:#ef4444;background:rgba(239,68,68,.18)}
-#question{font-size:clamp(22px,3vw,34px);line-height:1.25;text-align:center}
-#answers p,.studyText{
-  font-size:clamp(17px,2vw,22px);
-  line-height:1.55;
-  color:#e5eefb;
-  text-align:left;
-}
-.meta{color:var(--cyan);font-weight:800;text-align:center;margin-bottom:10px}
-.result{font-size:20px;line-height:1.45;text-align:center}
-.navRow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-textarea{
-  width:100%;min-height:170px;border-radius:18px;
-  background:rgba(2,6,23,.7);color:white;border:1px solid rgba(125,211,252,.25);
-  padding:16px;font-size:18px;resize:vertical;
-}
-.progressLine{height:12px;border-radius:999px;background:rgba(255,255,255,.13);overflow:hidden;margin:14px 0}
-.progressBar{height:100%;background:linear-gradient(90deg,#22c55e,#58a6ff);width:0%}
-.footer{
-  text-align:center;color:var(--muted);padding:32px 12px 80px;
-}
-.footer a{color:var(--cyan);text-decoration:none;font-weight:800}
-.waves{
-  position:fixed;left:0;right:0;bottom:-1px;height:82px;pointer-events:none;z-index:5;
-  background:
-    radial-gradient(65px 22px at 8% 60%,rgba(88,166,255,.22),transparent 70%),
-    radial-gradient(95px 24px at 32% 72%,rgba(88,166,255,.18),transparent 70%),
-    radial-gradient(120px 28px at 62% 68%,rgba(88,166,255,.16),transparent 70%),
-    linear-gradient(180deg,transparent,rgba(12,48,88,.72));
-}
-.hidden{display:none!important}
-@media(max-width:720px){
-  .hero{min-height:100vh}
-  .identity{gap:14px}
-  .patches{flex-direction:row;order:2}
-  .titleBlock{order:3}
-  .menuGrid{grid-template-columns:1fr}
-  .brandPanel{border-radius:24px}
-  .menuCard,.screenCard{border-radius:22px}
-  button{font-size:16px;padding:14px}
-}
+html,body{margin:0;min-height:100%;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+body:before{content:"";position:fixed;inset:0;background:linear-gradient(135deg,rgba(2,8,23,.94),rgba(4,35,64,.9)),url('captain%203.jpg') center/cover no-repeat;filter:saturate(.9);z-index:-3}
+body:after{content:"";position:fixed;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 18px),radial-gradient(circle at 50% 0%,rgba(58,166,255,.18),transparent 50%);z-index:-2;pointer-events:none}
+.app{width:min(1120px,100%);margin:0 auto;padding:22px 18px 80px}
+.hero{position:relative;overflow:hidden;border:1px solid rgba(125,211,252,.25);border-radius:30px;background:linear-gradient(160deg,rgba(5,25,50,.92),rgba(2,9,25,.96));box-shadow:0 20px 60px rgba(0,0,0,.45);padding:28px;margin-bottom:22px;text-align:center}
+.hero:before{content:"";position:absolute;inset:-40%;background:radial-gradient(circle,rgba(29,139,214,.16),transparent 40%);animation:float 10s linear infinite;pointer-events:none}
+@keyframes float{0%{transform:translateX(-5%)}50%{transform:translateX(5%)}100%{transform:translateX(-5%)}}
+.brandRow{position:relative;display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:20px}
+.creatorPhoto{width:148px;height:148px;border-radius:50%;object-fit:cover;border:4px solid #58a6ff;box-shadow:0 0 28px rgba(88,166,255,.75)}
+.patchImg{width:104px;height:104px;object-fit:contain;filter:drop-shadow(0 0 14px rgba(247,201,72,.55))}
+.title{position:relative;margin:8px 0 4px;font-size:clamp(34px,6vw,64px);letter-spacing:.5px;color:#dff3ff;text-shadow:0 4px 24px rgba(88,166,255,.35)}
+.subtitle{position:relative;margin:0;color:var(--muted);font-size:clamp(15px,2.2vw,20px)}
+.linkedin{position:relative;display:inline-block;margin-top:18px;padding:14px 24px;border-radius:999px;background:linear-gradient(135deg,#0a66c2,#1da1f2);color:white;text-decoration:none;font-weight:800;box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.panel{border:1px solid rgba(125,211,252,.22);border-radius:28px;background:var(--panel2);box-shadow:0 18px 48px rgba(0,0,0,.38);padding:28px;margin:18px auto;max-width:920px;text-align:center;backdrop-filter:blur(8px)}
+.panelTitle{font-size:clamp(28px,4vw,42px);margin:8px 0 24px;color:white}.kicker{color:#7dd3fc;font-size:18px;font-weight:800;margin-bottom:8px}
+.modeGrid,.studyList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.modeGrid{max-width:780px;margin:0 auto}.studyList{max-width:860px;margin:0 auto}.btn,.modeBtn,.studyBtn,.answerBtn,.actionBtn{appearance:none;border:none;border-radius:18px;padding:17px 18px;font-size:19px;font-weight:800;color:white;background:linear-gradient(135deg,var(--blue2),var(--blue));box-shadow:0 8px 20px rgba(0,0,0,.28);cursor:pointer;text-align:center}.modeBtn:nth-child(7),.danger{background:linear-gradient(135deg,#9d1c2b,#e8505b)}.answerBtn{display:block;width:100%;margin:12px 0;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16)}.answerBtn:disabled{opacity:.55}.actionBtn{margin-top:12px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18)}
+.contentText{font-size:20px;line-height:1.55;text-align:left;color:#edf6ff}.meta{color:#7dd3fc;font-weight:800}.result{font-size:20px;line-height:1.5}.textarea{width:100%;min-height:160px;border-radius:18px;border:1px solid rgba(125,211,252,.28);background:rgba(2,8,23,.72);color:white;padding:16px;font-size:18px;outline:none}.topActions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}.footer{text-align:center;color:#9fb4c9;font-size:14px;margin:30px 0}.progressBar{height:14px;background:rgba(255,255,255,.12);border-radius:999px;overflow:hidden;margin:14px 0}.progressFill{height:100%;width:0%;background:linear-gradient(90deg,#1da1f2,#7dd3fc)}
+.wave{position:fixed;left:0;right:0;bottom:0;height:76px;background:linear-gradient(0deg,rgba(29,139,214,.26),transparent);z-index:-1}
+@media(max-width:700px){.app{padding:14px 12px 70px}.hero{padding:22px 14px;border-radius:26px}.brandRow{gap:14px}.creatorPhoto{width:116px;height:116px}.patchImg{width:72px;height:72px}.panel{padding:20px 14px;border-radius:24px}.modeGrid,.studyList{grid-template-columns:1fr;gap:12px}.modeBtn,.studyBtn,.answerBtn,.actionBtn{width:100%;font-size:18px;padding:16px;border-radius:18px}.contentText{font-size:18px}.linkedin{width:100%;padding:14px 18px}.topActions{display:block}.topActions .actionBtn{width:100%}}
 </style>
 </head>
 <body>
 <div class="app">
   <section class="hero">
-    <div class="brandPanel">
-      <div class="identity">
-        <div class="patches">
-          <img class="patchImg" src="patch1_transparent.png" onerror="this.src='pATCH 1.jpg'" alt="Anchor patch">
-          <img class="patchImg" src="patch2_transparent.png" onerror="this.src='PATCH 2.jpg'" alt="Helm patch">
-        </div>
-        <img class="captainPortrait" src="captain 3.jpg" alt="Captain Kyrylo Tkachenko">
-        <div class="titleBlock">
-          <h1>⚓ UKFSE Trainer</h1>
-          <h2>Created by Captain Kyrylo Tkachenko</h2>
-          <p>UKFSE / UKLAP Grade 1 Master preparation platform with study modules, quick tests, full exam practice, oral questions and emergency scenarios.</p>
-          <a class="linkedin" href="https://www.linkedin.com/in/captain-kyrylo-tkachenko/" target="_blank">Follow Captain Tkachenko on LinkedIn</a>
-        </div>
-      </div>
+    <div class="brandRow">
+      <img src="patch1_transparent.png" onerror="this.src='pATCH%201.jpg'" class="patchImg" alt="Patch 1">
+      <img src="captain%203.jpg" class="creatorPhoto" alt="Captain Kyrylo Tkachenko">
+      <img src="patch2_transparent.png" onerror="this.src='PATCH%202.jpg'" class="patchImg" alt="Patch 2">
+    </div>
+    <h1 class="title">⚓ UKFSE Trainer</h1>
+    <p class="subtitle">UKFSE / UKLAP Grade 1 Master preparation platform<br>Created by <b>Captain Kyrylo Tkachenko</b></p>
+    <a class="linkedin" href="https://www.linkedin.com/in/captain-kyrylo-tkachenko/" target="_blank">Follow Captain Tkachenko on LinkedIn</a>
+  </section>
 
-      <div id="menu" class="menuCard">
-        <h2>Choose Mode</h2>
-        <div class="menuGrid">
-          <button onclick="showStudy()">📚 Study Mode</button>
-          <button onclick="startQuiz()">⚡ Quick Test</button>
-          <button onclick="startExam()">🎓 Full Exam</button>
-          <button onclick="startOral()">🎤 Oral Exam</button>
-          <button onclick="startScenario()">🚨 Emergency Scenarios</button>
-          <button onclick="showProgress()">📊 Progress</button>
-          <button onclick="showMistakes()">❌ Mistakes</button>
-          <button class="danger" onclick="resetSession()">Reset Session</button>
-        </div>
-      </div>
-
-      <div id="screen" class="screenCard hidden">
-        <div id="meta" class="meta"></div>
-        <h2 id="question"></h2>
-        <div id="answers"></div>
-        <div id="result" class="result"></div>
-        <div class="navRow">
-          <button id="nextBtn" onclick="nextQuestion()">Next</button>
-          <button class="secondary" onclick="backToMenu()">⬅ Back to Menu</button>
-        </div>
-      </div>
+  <section id="menu" class="panel">
+    <div class="kicker">Training Console</div>
+    <h2 class="panelTitle">Choose Mode</h2>
+    <div class="modeGrid">
+      <button class="modeBtn" onclick="showStudy()">📚 Study Mode</button>
+      <button class="modeBtn" onclick="startQuiz()">⚡ Quick Test</button>
+      <button class="modeBtn" onclick="startExam()">🎓 Full Exam</button>
+      <button class="modeBtn" onclick="startOral()">🎤 Oral Exam</button>
+      <button class="modeBtn" onclick="startScenario()">🚨 Emergency Scenarios</button>
+      <button class="modeBtn" onclick="showProgress()">📊 Progress</button>
+      <button class="modeBtn" onclick="showMistakes()">❌ Mistakes</button>
+      <button class="modeBtn danger" onclick="resetSession()">Reset Session</button>
     </div>
   </section>
 
-  <footer class="footer">
-    <p>⚓ Built for UKFSE / UKLAP Grade 1 Master preparation</p>
-    <p>Created by <strong>Captain Kyrylo Tkachenko</strong></p>
-    <a href="https://www.linkedin.com/in/captain-kyrylo-tkachenko/" target="_blank">LinkedIn Profile</a>
-  </footer>
+  <section id="screen" class="panel" style="display:none">
+    <div id="kicker" class="kicker"></div>
+    <h2 id="question" class="panelTitle"></h2>
+    <div id="answers"></div>
+    <div id="result" class="result"></div>
+    <div class="topActions">
+      <button id="nextBtn" class="actionBtn" onclick="nextQuestion()">Next Question</button>
+      <button class="actionBtn" onclick="backToMenu()">⬅ Back to Menu</button>
+    </div>
+  </section>
+
+  <div class="footer">⚓ Built for UKFSE / UKLAP Grade 1 Master preparation · Captain Kyrylo Tkachenko</div>
 </div>
-<div class="waves"></div>
-
+<div class="wave"></div>
 <script>
-const baseQuestions = [
-["HSSC","How many survey types are defined under HSSC?",["5","6","7","8"],2],
-["HSSC","Which survey is a complete inspection before a ship is put into service?",["Annual","Initial","Intermediate","Additional"],1],
-["HSSC","Which survey leads to issue of a new certificate?",["Annual","Renewal","Intermediate","Bottom inspection"],1],
-["HSSC","Which survey is carried out after important repairs or renewals?",["Additional","Annual","Periodical","Intermediate"],0],
-["HSSC","Bottom inspection mainly concerns:",["Underwater part of ship","Crew contracts","Radio certificates","Cargo manifest"],0],
-["Certificates","Cargo ship 300 GT or more on international voyages requires:",["Cargo Ship Safety Radio Certificate","Passenger Ship Safety Certificate","MLC only","CSR only"],0],
-["Certificates","Cargo ship 500 GT or more on international voyages requires:",["Cargo Ship Safety Equipment Certificate","Fishing Certificate","Only port clearance","Only SEA"],0],
-["Certificates","Cargo Ship Safety Construction Certificate applies to cargo ships of:",["100 GT or more","300 GT or more","500 GT or more","All ships"],2],
-["Certificates","Passenger Ship Safety Certificate is normally renewed:",["Annually","Every 5 years","Every 10 years","Never"],0],
-["Certificates","Most HSSC certificates have maximum validity:",["1 year","3 years","5 years","10 years"],2],
-["ISM","ISM Code mainly concerns:",["Safety management","Crew nationality","Cargo freight rates","Pilot exemption"],0],
-["ISM","Under ISM, the company must hold:",["DOC","OLB","CSR","SEA"],0],
-["ISM","Under ISM, the ship must hold:",["SMC","Passport list","Port clearance","CBA only"],0],
-["ISM","SMS should include:",["Emergency preparedness procedures","Only food menu","Only port costs","Only crew salaries"],0],
-["ISM","Master has responsibility to operate ship according to:",["SMS","Agent advice only","Passenger request","Cargo owner instruction"],0],
-["ISPS","ISPS Code relates to:",["Security","Food","Wages","Loadline"],0],
-["ISPS","SSAS means:",["Ship Security Alert System","Ship Safety Annual Survey","Seafarer Salary Agreement Sheet","Safety Steering Alarm System"],0],
-["ISPS","Ship Security Plan for UK ships must be approved by:",["MCA","P&I Club","Agent","Charterer"],0],
-["ISPS","ISPS applies to cargo ships on international voyages of:",["300 GT and up","500 GT and up","1000 GT and up","All craft"],1],
-["MLC","Minimum age to work onboard under UK MLC rules is generally:",["14","15","16","18"],2],
-["MLC","Young seafarers under 18 generally must not work:",["At night","On deck","In port","With master"],0],
-["MLC","If SEA is not in English, shipowner must keep onboard:",["English translation","New medical certificate","Extra passport","Radio log"],0],
-["MLC","Late payment of wages may attract interest of:",["5% per annum","10% per annum","20% per annum","50% per annum"],2],
-["MLC","Crew accommodation inspection interval:",["Not exceeding 7 days","Monthly","Every 6 months","Only after PSC"],0],
-["MLC","Food and drinking water inspection must be:",["Not less than once a week","Daily only","Annually","Only after complaint"],0],
-["OLB","Official Log Book page 1 entries must be made by:",["Master","Agent","Cook","Any rating"],0],
-["OLB","Drill entries in OLB must be signed by:",["Master and one crew member","Agent only","P&I only","Cook only"],0],
-["OLB","Steering gear must be tested:",["Within 12 hours before sailing","Once per year","Only in drydock","After arrival"],0],
-["OLB","If an OLB entry is wrong, correction is made by:",["Further signed entry","Deleting the old entry","Correction fluid","Ignoring it"],0],
-["MAIB","MAIB accident report should normally be sent within:",["24 hours","7 days","14 days","1 month"],0],
-["MAIB","Serious injury report may be sent within:",["14 days","24 hours","6 months","1 year"],0],
-["MAIB","Evidence after accident must be preserved until released or normally for:",["28 days","3 days","7 days","5 years"],0],
-["MAIB","IRF means:",["Incident Report Form","International Radio Form","Inspection Record File","Internal Risk Form"],0],
-["Drills","Each crew member must participate monthly in:",["Abandon ship and fire drill","Only cleaning","Only payroll check","Only toolbox talk"],0],
-["Drills","If more than 25% of crew changed, drills should be held within:",["24 hours of leaving port","7 days","1 month","Next drydock"],0],
-["Drills","Passenger muster for voyages over 24 hours must occur within:",["24 hours of embarkation","7 days","At arrival","Only if requested"],0],
-["Safety","Ship with five or more persons employed requires:",["Safety Officer","Extra cook","Pilot","Port agent"],0],
-["Safety","Safety Committee is chaired by:",["Master","Agent","Cook","PSC"],0],
-["Safety","Risk assessments should cover:",["All work activities onboard","Only navigation","Only catering","Only certificates"],0],
-["Registry","Certificate of British Registry proves:",["Nationality and tonnages","Ownership and mortgages","Crew competence","ISM compliance"],0],
-["Registry","Certificate of British Registry is valid maximum:",["5 years","1 year","10 years","Unlimited"],0],
-["Registry","CSR provides onboard record of:",["History of the ship","Crew wages","Food menu","Weather forecast"],0],
-["Consul","British Consul is also known as:",["Proper officer","Shipowner","Safety officer","PSC inspector"],0],
-["Left Behind","Seaman left behind may be:",["Hospitalised, absent, detained or imprisoned","Only dead","Only on leave","Only dismissed"],0],
-["Penalties","MLC detention may occur if conditions are hazardous to:",["Safety, health or security of seafarers","Paint colour","Office comfort","Cargo price"],0],
-["Penalties","Oil pollution offences may carry maximum fine of:",["£250,000","£5,000","£500","£30,000"],0],
-["PSC","Port State Control detention means:",["Ship prohibited from sailing due deficiencies","Weather delay","Cargo delay","Customs formalities"],0],
-["Safe Manning","If crew falls below Safe Manning:",["Inform company and assess voyage safety","Continue normally","Ignore deficiency","Increase speed"],0],
-["Stowaways","If stowaway found, Master should:",["Ensure safety, security, report and record","Put ashore immediately anywhere","Ignore","Give navigation watch"],0],
-["STCW","STCW mainly sets standards for:",["Training, certification and watchkeeping","Customs duties","Port fees","Cargo sale"],0]
+const baseQuestions=[
+['HSSC','How many survey types are defined under HSSC?',['5','6','7','8'],2],['HSSC','Which survey is a complete inspection before a ship is put into service?',['Annual','Initial','Intermediate','Additional'],1],['HSSC','Which survey leads to issue of a new certificate?',['Annual','Renewal','Intermediate','Bottom inspection'],1],['HSSC','Which survey is carried out after important repairs or renewals?',['Additional','Annual','Periodical','Intermediate'],0],['Certificates','Cargo ship 300 GT or more on international voyages requires:',['Cargo Ship Safety Radio Certificate','Passenger Ship Safety Certificate','Fishing Certificate','MLC only'],0],['Certificates','Cargo ship 500 GT or more requires Safety Equipment Certificate.',['True','False','Only passenger ships','Only tankers'],0],['Certificates','Most HSSC certificates are valid maximum:',['1 year','3 years','5 years','10 years'],2],['ISM','Under ISM the company must hold:',['DOC','CSR','OLB','SEA'],0],['ISM','Under ISM the ship must hold:',['SMC','Passport list','CBA','Port clearance'],0],['ISM','SMS includes procedures for:',['Emergency situations','Salary only','Cargo sale','Crew entertainment'],0],['ISPS','ISPS Code relates to:',['Security','Food','Wages','Loadline'],0],['ISPS','SSAS means:',['Ship Security Alert System','Ship Safety Annual Survey','Safety Steering Alarm System','Crew report'],0],['ISPS','ISPS applies to cargo ships on international voyages of:',['300 GT+','500 GT+','1000 GT+','All boats'],1],['MLC','Minimum age to work onboard is generally:',['14','15','16','18'],2],['MLC','Young seafarers under 18 generally must not work:',['At night','On deck','In port','With officers'],0],['MLC','SEA minimum notice period is normally:',['24 hours','3 days','7 days','30 days'],2],['MLC','If SEA is not in English, onboard must be:',['English translation','Extra passport','Radio log','New medical'],0],['MLC','Late wage payment may attract interest of:',['5%','10%','20%','50%'],2],['OLB','OLB drill entries must be signed by:',['Master and one crew member','Agent only','Cook only','PSC only'],0],['OLB','Steering gear must be tested:',['Within 12 hours before sailing','Once per year','Only drydock','After arrival'],0],['OLB','Wrong OLB entry should be corrected by:',['Further signed entry','Deleting it','Correction fluid','Ignoring it'],0],['MAIB','Accident report to MAIB should normally be within:',['24 hours','7 days','14 days','1 month'],0],['MAIB','Evidence after accident must be preserved normally for:',['28 days unless released','3 days','7 days','5 years'],0],['Drills','Each crew member must participate monthly in:',['Fire and abandon ship drills','Only cleaning','Payroll check','Only toolbox'],0],['Drills','If 25% crew changed, drills within:',['24h of leaving port','7 days','1 month','Next drydock'],0],['Safety','Ship with five or more persons requires:',['Safety Officer','Extra cook','Pilot','Doctor'],0],['Safety','Safety Committee is chaired by:',['Master','Agent','Cook','PSC'],0],['Registry','Certificate of British Registry proves:',['Nationality and tonnages','Ownership','ISM compliance','Crew competence'],0],['CSR','CSR provides record of:',['History of the ship','Crew wages','Food menu','Weather'],0],['Consul','British Consul acts as:',['Proper officer','Shipowner','Safety officer','PSC inspector'],0],['Left Behind','Seaman left behind includes:',['Hospitalised, absent, detained or imprisoned','Only dead','Only on leave','Only dismissed'],0],['Penalties','Major oil pollution offences may carry maximum fine of:',['£250,000','£5,000','£500','£30,000'],0],['PSC','Port State Control detention means:',['Ship prohibited from sailing due deficiencies','Weather delay','Cargo delay','Customs only'],0],['Safe Manning','If crew falls below Safe Manning:',['Inform company and assess voyage safety','Continue normally','Ignore','Increase speed'],0],['Stowaways','If stowaway found, first priority is:',['Safety, security and inform company/authorities','Hide him','Put ashore anywhere','Ignore'],0]
 ];
-const questions = baseQuestions.map((x,i)=>({id:i+1,topic:x[0],q:x[1],a:x[2],correct:x[3]}));
-
-const studyData = {
-"HSSC Surveys":[
-"HSSC = Harmonised System of Survey and Certification.",
-"Seven survey types: Initial, Periodical, Renewal, Intermediate, Annual, Bottom Inspection and Additional Survey.",
-"Initial survey is a complete inspection before the ship enters service.",
-"Renewal survey leads to a new certificate.",
-"Additional survey is after repair, investigation, important repair or renewal.",
-"Exam memory: Initial = before service; Renewal = new certificate; Additional = after repair."
-],
-"Certificates":[
-"Passenger ship on international voyages: Passenger Ship Safety Certificate.",
-"Cargo ship 300 GT or more: Cargo Ship Safety Radio Certificate.",
-"Cargo ship 500 GT or more: Cargo Ship Safety Equipment and Safety Construction Certificates.",
-"Most HSSC certificates: maximum 5 years; Passenger Ship Safety Certificate normally annually.",
-"Certificates must be valid and available onboard for inspection."
-],
-"ISM Code":[
-"ISM = International Safety Management Code.",
-"Company requires Document of Compliance (DOC). Ship requires Safety Management Certificate (SMC).",
-"Ship carries SMC and copy of DOC.",
-"SMS includes safe operation, emergency preparedness, accident reporting, audits and management review.",
-"Master operates the ship according to SMS and has overriding authority for safety and pollution prevention."
-],
-"ISPS Code":[
-"ISPS Code strengthens ship and port facility security.",
-"Ship Security Plan must be approved for UK ships.",
-"Ship Security Assessment supports the Ship Security Plan.",
-"SSAS = Ship Security Alert System; alert goes to nominated 24h contact and NMOC.",
-"ISPS applies to passenger ships and cargo ships 500 GT and upwards on international voyages."
-],
-"MLC":[
-"MLC protects seafarers' working and living conditions.",
-"MLC covers SEA, wages, repatriation, food, accommodation, medical care and complaint procedures.",
-"Minimum age generally 16; young seafarers under 18 generally restricted from night work.",
-"If SEA is not in English, English translation must be held onboard.",
-"Accommodation and food/water inspections are normally weekly and recorded."
-],
-"Official Log Book":[
-"OLB is the official record of important ship events.",
-"Drills, inspections, accidents, deaths, complaints and changes of Master are recorded.",
-"Drill entries signed by Master and one crew member.",
-"Incorrect entry should be corrected by further signed entry, not erased.",
-"Steering gear tested within 12 hours before sailing."
-],
-"MAIB":[
-"MAIB = Marine Accident Investigation Branch.",
-"Accidents reported by quickest means and normally within 24 hours.",
-"Serious injuries may be reported within 14 days.",
-"Evidence must be preserved until released, no investigation after 28 days, or inspector no longer requires it.",
-"IRF = Incident Report Form."
-],
-"Musters & Drills":[
-"Master compiles and updates muster list.",
-"Muster list displayed on bridge, engine room and crew accommodation.",
-"Each crew member participates in fire and abandon ship drills monthly.",
-"If more than 25% crew changed, drills within 24h of leaving port.",
-"Passenger muster within 24h of embarkation for voyages over 24 hours."
-],
-"Safety":[
-"Safety Officer required on ships with five or more persons employed.",
-"Safety Officer inspections of accessible work areas at least once every 3 months.",
-"Safety Committee is chaired by the Master.",
-"Risk assessments should cover all work activities onboard.",
-"Safety Officer may stop unsafe work and inform Master."
-],
-"Registry & CSR":[
-"Certificate of British Registry proves nationality and tonnages, not ownership.",
-"Certificate of British Registry valid maximum 5 years.",
-"CSR = Continuous Synopsis Record.",
-"CSR provides onboard history of ship, flag, registry, owner and company details.",
-"If certificate lost abroad, Master applies for Provisional Certificate through proper officer."
-],
-"Consul & Left Behind":[
-"British Consul acts as proper officer under Merchant Shipping legislation.",
-"Consul may assist with crew matters, wages, repatriation, OLB, protests and deaths.",
-"Seaman left behind may be hospitalised, absent, detained or imprisoned.",
-"Master records seaman left behind in OLB and List of Crew.",
-"Inform agent, proper officer, owner/manager, P&I and relevant authorities."
-],
-"Penalties & Detention":[
-"MLC detention may occur for hazardous conditions or serious/repeated breaches.",
-"Release may require rectification, security, proceedings concluded or costs/fines paid.",
-"Oil pollution offences may carry high fines.",
-"Master should cooperate with authorities and record actions.",
-"Exam memory: detention = serious deficiency affecting safety, health or security."
-],
-"STCW Manila":[
-"STCW = Standards of Training, Certification and Watchkeeping.",
-"Manila amendments updated training, rest hours, security training and medical fitness.",
-"Watchkeepers must meet competence and certification requirements.",
-"Hours of rest are critical for fatigue management.",
-"Security awareness and designated security duties are part of STCW training."
-],
-"Safe Manning":[
-"Safe Manning Document specifies minimum required crew.",
-"Master must check whether vessel remains safely manned after crew changes or illness.",
-"If below safe manning, inform company and assess whether voyage can proceed.",
-"Replacement crew may be required before departure.",
-"Any deficiency should be recorded and communicated."
-],
-"PSC":[
-"Port State Control checks compliance with international and flag requirements.",
-"Deficiencies may lead to rectification before departure or detention.",
-"Master should cooperate, produce certificates and records, and inform company.",
-"Serious or repeated deficiencies increase detention risk.",
-"Corrective actions should be documented."
-],
-"Stowaways":[
-"If stowaway found, ensure safety, security and humane treatment.",
-"Search ship, secure area, inform company/authorities and document details.",
-"Do not put stowaway ashore unlawfully.",
-"Maintain records and follow company/security procedures.",
-"Consider ISPS implications and port state requirements."
-]
+const questions=[]; for(let r=0;r<10;r++){baseQuestions.forEach((x,i)=>questions.push({topic:x[0],q:x[1],a:x[2],correct:x[3]}));}
+const studyData={
+'HSSC Surveys':['HSSC = Harmonised System of Survey and Certification.','Seven surveys: Initial, Periodical, Renewal, Intermediate, Annual, Bottom Inspection and Additional.','Initial survey is before ship enters service.','Renewal survey leads to a new certificate.','Additional survey is after important repair or renewal.'],
+'Certificates':['Cargo ship 300 GT+ needs Safety Radio Certificate.','Cargo ship 500 GT+ needs Safety Equipment and Safety Construction Certificate.','Passenger Ship Safety Certificate is normally annual.','Most HSSC certificates have maximum 5-year validity.'],
+'ISM Code':['ISM = International Safety Management Code.','Company must hold DOC. Ship must hold SMC.','SMS includes safe operation, pollution prevention, emergency preparedness and internal audits.','Master has overriding authority for safety and pollution prevention.'],
+'ISPS Code':['ISPS relates to ship and port security.','SSP = Ship Security Plan. SSA = Ship Security Assessment.','SSAS sends covert security alert to nominated contacts.','Security levels: 1 normal, 2 heightened, 3 exceptional.'],
+'MLC':['MLC protects seafarers working and living conditions.','Covers SEA, wages, repatriation, food, accommodation and medical care.','Minimum age generally 16. Young seafarers have night work restrictions.','English translation of SEA must be onboard if SEA is not in English.'],
+'Official Log Book':['OLB records official ship events, drills, inspections, accidents, complaints and changes.','Drill entries signed by Master and one crew member.','Steering gear tested within 12 hours before sailing.','Wrong entries corrected by further signed entry, not erased.'],
+'MAIB':['MAIB investigates accidents to improve safety, not to punish.','Report accidents by quickest means, normally within 24 hours.','Preserve charts, logbooks, VDR/electronic records and equipment.','Serious injuries may be reported within 14 days.'],
+'Musters & Drills':['Monthly fire and abandon ship drills.','If more than 25% crew changed, drills within 24 hours of leaving port.','Muster list kept updated by Master.','Passenger muster within 24 hours for voyages over 24 hours.'],
+'Safety':['Safety Officer required where five or more persons are employed.','Safety Officer inspections at least every 3 months.','Safety Committee chaired by Master.','Risk assessments cover all work activities onboard.'],
+'Registry & CSR':['Certificate of British Registry proves nationality and tonnage, not ownership.','CSR = Continuous Synopsis Record, history of the ship.','If registry certificate lost abroad, apply for Provisional Certificate via Proper Officer.'],
+'Consul & Left Behind':['British Consul acts as proper officer abroad.','Can assist with crew, wages, OLB, protests, deaths and repatriation.','Seaman left behind must be recorded in OLB and List of Crew; inform agent, proper officer, owner and P&I.'],
+'Penalties & Detention':['Ship may be detained for serious MLC breaches or hazardous conditions.','Oil pollution offences may carry very high fines.','Release may require rectification, proceedings concluded, costs/fines paid or security.'],
+'STCW Manila':['STCW sets standards for training, certification and watchkeeping.','Manila amendments updated rest hours, security training, ECDIS and refresher training.','Medical fitness and competency standards were also updated.'],
+'Safe Manning':['Safe Manning Document states minimum required manning.','If below safe manning, inform company and assess whether vessel may proceed.','Replacement may be required before sailing.'],
+'PSC':['PSC may inspect certificates, crew, condition and MLC compliance.','Serious deficiencies can lead to detention.','Master should cooperate, rectify and notify company/flag.'],
+'Stowaways':['Ensure safety and security, inform company and authorities.','Search vessel, protect evidence and maintain humane treatment.','Do not disembark without authority.']
 };
-
-const oralQuestions = [
-["Explain the seven HSSC survey types.",["initial","periodical","renewal","intermediate","annual","bottom","additional"]],
-["Difference between annual and renewal survey?",["annual","renewal","new certificate"]],
-["Certificates for cargo ship over 500 GT?",["safety equipment","safety construction","radio"]],
-["ISM duties for company and ship?",["doc","smc","sms"]],
-["What must be carried onboard under ISM?",["smc","copy of doc"]],
-["Purpose of ISPS Code?",["security","ship security plan"]],
-["What is SSAS?",["ship security alert system","nmoc"]],
-["Purpose of Maritime Labour Certificate?",["mlc","working","living"]],
-["SEA requirements?",["seafarer employment agreement","signed","copy"]],
-["What if SEA not in English?",["english translation"]],
-["Young seafarer restrictions?",["under 18","night"]],
-["OLB narrative entries?",["accidents","complaints","deaths"]],
-["Correct OLB error?",["further entry","sign"]],
-["When test steering gear?",["12 hours","before sailing"]],
-["When report to MAIB?",["24 hours","accident"]],
-["Evidence after accident?",["charts","log","data"]],
-["Muster list requirements?",["master","bridge","engine room"]],
-["Monthly drill requirements?",["fire","abandon ship","monthly"]],
-["Safety Officer duties?",["inspections","coswp","stop work"]],
-["Certificate of British Registry?",["nationality","tonnage","not ownership"]],
-["CSR purpose?",["history","ship"]],
-["Seaman left behind abroad?",["olb","proper officer","agent","owner"]],
-["Role of British Consul?",["proper officer","crew","repatriation"]],
-["What can lead to MLC detention?",["hazardous","safety","health","security"]]
-].map((x,i)=>({id:i+1,q:"Captain, "+x[0],key:x[1]}));
-
-const scenarios = [
-["Seaman left behind","Crew member hospitalised ashore and vessel is ready to sail. What do you do?",["olb","list of crew","agent","proper officer","owner","p&i","safe manning"]],
-["Missing crew before departure","Crew member failed to return from shore leave before departure.",["search","agent","immigration","proper officer","owner","olb","safe manning"]],
-["Death onboard","Crew member dies onboard.",["medical guide","owner","next of kin","maib","olb","body","property"]],
-["Major injury","Crew member suffers fracture onboard.",["medical care","maib","24 hours","olb","evidence"]],
-["Oil pollution","Oil discharged overboard in UK waters.",["stop","sopep","contain","report","authorities","olb"]],
-["PSC detention","PSC finds serious MLC breaches.",["rectify","company","mca","evidence","crew welfare"]],
-["Fire drill not possible","Monthly drill cannot be held due weather.",["olb","reason","unsafe","next opportunity"]],
-["Lost Registry certificate abroad","Certificate of Registry lost abroad.",["proper officer","declaration","provisional certificate"]],
-["SSAS activation","Security threat detected and SSAS activated.",["covert","24 hour contact","nmoc","security plan"]],
-["Stowaway found","Stowaway discovered after departure.",["safety","security","company","authorities","record"]]
-].map((x,i)=>({id:i+1,title:x[0],question:x[1],points:x[2]}));
-
-let mode="", queue=[], index=0, current=null, answered=false, score=0, mistakes=[], studyTopicName="", slideIndex=0;
-
-function shuffle(arr){return [...arr].sort(()=>Math.random()-.5)}
-function showScreen(){document.getElementById("menu").classList.add("hidden");document.getElementById("screen").classList.remove("hidden")}
-function backToMenu(){document.getElementById("screen").classList.add("hidden");document.getElementById("menu").classList.remove("hidden");document.getElementById("result").innerHTML=""}
-function setNext(show=true){document.getElementById("nextBtn").style.display=show?"block":"none"}
-function finish(title,total){setNext(false);document.getElementById("meta").innerHTML="Completed";document.getElementById("question").innerHTML=title;document.getElementById("answers").innerHTML=`<h2>Score: ${score}/${total}</h2><p style="text-align:center">Return to menu to start a new session.</p>`;document.getElementById("result").innerHTML=""}
-
-function startQuiz(){mode="quiz";queue=shuffle(questions);index=0;score=0;answered=false;showScreen();showQuestion()}
-function showQuestion(){answered=false;setNext(true);current=queue[index];document.getElementById("meta").innerHTML=`Question ${index+1}/${queue.length} · ${current.topic}`;document.getElementById("question").innerHTML=current.q;document.getElementById("answers").innerHTML=current.a.map((a,i)=>`<button class="answer" onclick="check(${i})">${a}</button>`).join("");document.getElementById("result").innerHTML=""}
-function check(i){if(answered)return;answered=true;let btns=[...document.querySelectorAll(".answer")];btns.forEach(b=>b.disabled=true);btns[current.correct].classList.add("correct");if(i===current.correct){score++;document.getElementById("result").innerHTML=`✅ Correct · Score ${score}/${queue.length}`}else{btns[i]?.classList.add("wrong");mistakes.push(`${current.topic}: ${current.q}`);document.getElementById("result").innerHTML=`❌ Wrong<br>Correct answer: ${current.a[current.correct]}<br>Score ${score}/${queue.length}`}}
-function nextQuestion(){if(mode==="study"){nextSlide();return} if(!answered){document.getElementById("result").innerHTML="Answer this question first.";return} index++; if(index>=queue.length){finish("⚡ Quick Test Finished",queue.length);return} showQuestion()}
-
-function startExam(){mode="exam";queue=shuffle(questions).slice(0,Math.min(30,questions.length));index=0;score=0;answered=false;showScreen();showExam()}
-function showExam(){answered=false;setNext(false);current=queue[index];document.getElementById("meta").innerHTML=`Full Exam · Question ${index+1}/${queue.length} · ${current.topic}`;document.getElementById("question").innerHTML=current.q;document.getElementById("answers").innerHTML=current.a.map((a,i)=>`<button class="answer" onclick="checkExam(${i})">${a}</button>`).join("");document.getElementById("result").innerHTML=""}
-function checkExam(i){if(answered)return;answered=true;if(i===current.correct)score++;else mistakes.push(`${current.topic}: ${current.q}`);index++; if(index>=queue.length){finish("🎓 Full Exam Finished",queue.length);return} showExam()}
-
-function startOral(){mode="oral";queue=shuffle(oralQuestions);index=0;score=0;showScreen();showOral()}
-function showOral(){answered=false;setNext(false);current=queue[index];document.getElementById("meta").innerHTML=`Oral Exam · Question ${index+1}/${queue.length}`;document.getElementById("question").innerHTML=current.q;document.getElementById("answers").innerHTML=`<textarea id="oralAnswer" placeholder="Type your oral-style answer..."></textarea><button onclick="checkOral()">Check My Answer</button>`;document.getElementById("result").innerHTML=""}
-function checkOral(){if(answered)return;answered=true;let ans=document.getElementById("oralAnswer").value.toLowerCase();let found=0,miss=[];current.key.forEach(k=>{if(ans.includes(k)){found++}else miss.push(k)});score+=found;document.getElementById("result").innerHTML=`Score: ${found}/${current.key.length}<br><br>Missed points:<br>${miss.join("<br>")}<br><br><button onclick="nextOral()">Next Oral Question</button>`}
-function nextOral(){index++; if(index>=queue.length){finish("🎤 Oral Exam Finished",queue.reduce((s,q)=>s+q.key.length,0));return} showOral()}
-
-function startScenario(){mode="scenario";queue=shuffle(scenarios);index=0;score=0;showScreen();showScenario()}
-function showScenario(){answered=false;setNext(false);current=queue[index];document.getElementById("meta").innerHTML=`Scenario ${index+1}/${queue.length}`;document.getElementById("question").innerHTML=`🚨 ${current.title}<br><br>${current.question}`;document.getElementById("answers").innerHTML=`<textarea id="scenarioAnswer" placeholder="Write your Master's actions..."></textarea><button onclick="checkScenario()">Submit</button>`;document.getElementById("result").innerHTML=""}
-function checkScenario(){if(answered)return;answered=true;let ans=document.getElementById("scenarioAnswer").value.toLowerCase();let found=0,miss=[];current.points.forEach(p=>{if(ans.includes(p)){found++}else miss.push(p)});score+=found;document.getElementById("result").innerHTML=`Score: ${found}/${current.points.length}<br><br>Missing points:<br>${miss.join("<br>")}<br><br><button onclick="nextScenario()">Next Scenario</button>`}
-function nextScenario(){index++; if(index>=queue.length){finish("🚨 Scenarios Finished",queue.reduce((s,q)=>s+q.points.length,0));return} showScenario()}
-
-function showStudy(){mode="studyMenu";showScreen();setNext(false);document.getElementById("meta").innerHTML="Study Mode";document.getElementById("question").innerHTML="Choose Study Module";document.getElementById("answers").innerHTML=Object.keys(studyData).map(k=>`<button onclick="openStudy('${k.replace(/'/g,"\\'")}')">${k}</button>`).join("");document.getElementById("result").innerHTML=""}
-function openStudy(k){mode="study";studyTopicName=k;slideIndex=0;showSlide()}
-function showSlide(){let slides=studyData[studyTopicName];setNext(true);document.getElementById("meta").innerHTML=`${studyTopicName} · Slide ${slideIndex+1}/${slides.length}`;document.getElementById("question").innerHTML=studyTopicName;document.getElementById("answers").innerHTML=`<p class="studyText">${slides[slideIndex]}</p><div class="navRow"><button class="secondary" onclick="prevSlide()">⬅ Previous</button><button onclick="nextSlide()">Next ➡</button></div>`;document.getElementById("result").innerHTML=""}
-function nextSlide(){let slides=studyData[studyTopicName];slideIndex++; if(slideIndex>=slides.length){setNext(false);document.getElementById("question").innerHTML=`📚 ${studyTopicName} Finished`;document.getElementById("answers").innerHTML="<p style='text-align:center'>Return to menu or choose another module.</p>";return} showSlide()}
-function prevSlide(){if(slideIndex>0){slideIndex--;showSlide()}}
-
-function showProgress(){showScreen();setNext(false);let total=questions.length;let pct=total?Math.round(score/total*100):0;document.getElementById("meta").innerHTML="Progress";document.getElementById("question").innerHTML="📊 Progress";document.getElementById("answers").innerHTML=`<p>Total test questions: ${questions.length}</p><p>Oral questions: ${oralQuestions.length}</p><p>Scenarios: ${scenarios.length}</p><p>Mistakes: ${mistakes.length}</p><div class="progressLine"><div class="progressBar" style="width:${Math.min(100,pct)}%"></div></div>`;document.getElementById("result").innerHTML=""}
-function showMistakes(){showScreen();setNext(false);document.getElementById("meta").innerHTML="Mistakes";document.getElementById("question").innerHTML="❌ Mistakes";document.getElementById("answers").innerHTML=mistakes.length?mistakes.map((m,i)=>`<p>${i+1}. ${m}</p>`).join(""):"<p style='text-align:center'>No mistakes yet ✅</p>";document.getElementById("result").innerHTML=""}
-function resetSession(){score=0;mistakes=[];alert("Session reset")}
+const oralQuestions=[
+['Captain, explain the seven HSSC survey types.',['initial','periodical','renewal','intermediate','annual','bottom','additional']],['Captain, difference between annual and renewal survey?',['annual','renewal','certificate']],['Captain, ISM duties for company and ship?',['doc','smc','sms','emergency']],['Captain, purpose of ISPS Code?',['security','ship security plan','illegal']],['Captain, explain SEA requirements.',['seafarer employment agreement','signed','copy','english']],['Captain, MAIB reporting requirement.',['24 hours','quickest','accident']],['Captain, OLB correction procedure.',['further entry','signed','not erased']],['Captain, actions if seaman left behind abroad.',['olb','list of crew','proper officer','agent','owner']],['Captain, what is CSR?',['continuous synopsis record','history','ship']],['Captain, Safety Officer duties.',['inspection','coswp','stop work','master']]
+];
+const scenarios=[
+['Seaman left behind','Crew member is hospitalised ashore and vessel ready to sail.',['olb','list of crew','agent','proper officer','owner','p&i','safe manning']],['Oil pollution','Oil discharged overboard in UK waters.',['stop','sopep','contain','report','authorities','olb']],['Death onboard','Crew member dies onboard.',['medical guide','owner','next of kin','maib','olb','body','property']],['PSC detention','PSC finds serious deficiencies.',['rectify','company','flag','crew welfare','evidence','release']],['SSAS activation','Security threat detected and SSAS activated.',['covert','24 hour contact','nmoc','security plan','company']]
+];
+let score=0,mistakes=[],mode='',queue=[],idx=0,answered=false,current=null,slide=0,currentTopic='',oralQueue=[],scenarioQueue=[];
+const menu=document.getElementById('menu'),screen=document.getElementById('screen'),question=document.getElementById('question'),answers=document.getElementById('answers'),result=document.getElementById('result'),kicker=document.getElementById('kicker'),nextBtn=document.getElementById('nextBtn');
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)} function showScreen(){menu.style.display='none';screen.style.display='block'} function hideNext(){nextBtn.style.display='none'} function showNext(){nextBtn.style.display='inline-block'} function backToMenu(){screen.style.display='none';menu.style.display='block';showNext()} function resetSession(){score=0;mistakes=[];alert('Session reset')}
+function startQuiz(){mode='quiz';score=0;queue=shuffle(questions);idx=0;showScreen();showNext();showQuestion()} function showQuestion(){answered=false;current=queue[idx];kicker.textContent=current.topic;question.innerHTML='Question '+(idx+1)+'/'+queue.length+'<br>'+current.q;answers.innerHTML=current.a.map((x,i)=>`<button class="answerBtn" onclick="check(${i})">${x}</button>`).join('');result.innerHTML=''} function check(i){if(answered)return;answered=true;document.querySelectorAll('.answerBtn').forEach(b=>{b.disabled=true;b.style.opacity=.55});if(i===current.correct){score++;result.innerHTML='✅ Correct · Score '+score+'/'+queue.length}else{mistakes.push(current.topic+': '+current.q);result.innerHTML='❌ Wrong<br>Correct: '+current.a[current.correct]+'<br>Score '+score+'/'+queue.length}} function nextQuestion(){if(mode!=='quiz'){return} if(!answered){result.innerHTML='Answer first.';return} idx++; if(idx>=queue.length){hideNext();kicker.textContent='Finished';question.textContent='Quick Test Finished';answers.innerHTML='<h2>Score: '+score+'/'+queue.length+'</h2>';result.innerHTML='All questions completed.';return} showQuestion()}
+function startExam(){mode='exam';score=0;queue=shuffle(questions).slice(0,50);idx=0;showScreen();hideNext();showExam()} function showExam(){answered=false;current=queue[idx];kicker.textContent='Full Exam';question.innerHTML='Question '+(idx+1)+'/'+queue.length+'<br>'+current.topic+'<br>'+current.q;answers.innerHTML=current.a.map((x,i)=>`<button class="answerBtn" onclick="checkExam(${i})">${x}</button>`).join('');result.innerHTML=''} function checkExam(i){if(answered)return;answered=true;if(i===current.correct)score++;else mistakes.push(current.topic+': '+current.q);idx++; if(idx>=queue.length){question.textContent='Full Exam Finished';answers.innerHTML='<h2>Score: '+score+'/'+queue.length+'</h2>';result.innerHTML='Return to menu to start a new exam.';return} showExam()}
+function showStudy(){showScreen();hideNext();kicker.textContent='Study Mode';question.textContent='Choose Study Module';answers.innerHTML='<div class="studyList">'+Object.keys(studyData).map(t=>`<button class="studyBtn" onclick="studyTopic('${t}')">${t}</button>`).join('')+'</div>';result.innerHTML=''} function studyTopic(t){currentTopic=t;slide=0;showSlide()} function showSlide(){let s=studyData[currentTopic];kicker.textContent=currentTopic;question.innerHTML='Slide '+(slide+1)+'/'+s.length;answers.innerHTML='<p class="contentText">'+s[slide]+'</p><div class="progressBar"><div class="progressFill" style="width:'+((slide+1)/s.length*100)+'%"></div></div><button class="actionBtn" onclick="prevSlide()">⬅ Previous</button><button class="actionBtn" onclick="nextSlide()">Next ➡</button>';result.innerHTML=''} function nextSlide(){let s=studyData[currentTopic]; if(slide<s.length-1){slide++;showSlide()}else{showStudy()}} function prevSlide(){if(slide>0){slide--;showSlide()}}
+function startOral(){mode='oral';oralQueue=shuffle(oralQuestions);idx=0;showScreen();hideNext();showOral()} function showOral(){answered=false;current=oralQueue[idx];kicker.textContent='Oral Exam';question.innerHTML='Question '+(idx+1)+'/'+oralQueue.length+'<br>'+current[0];answers.innerHTML='<textarea class="textarea" id="oralAns"></textarea><button class="actionBtn" onclick="checkOral()">Check Answer</button>';result.innerHTML=''} function checkOral(){if(answered)return;answered=true;let ans=document.getElementById('oralAns').value.toLowerCase();let found=0,miss=[];current[1].forEach(k=>ans.includes(k)?found++:miss.push(k));result.innerHTML='Score: '+found+'/'+current[1].length+'<br>Missing: '+miss.join(', ');setTimeout(()=>{idx++; if(idx>=oralQueue.length){question.textContent='Oral Exam Finished';answers.innerHTML='';result.innerHTML='Return to menu.'}else showOral()},1800)}
+function startScenario(){mode='scenario';scenarioQueue=shuffle(scenarios);idx=0;showScreen();hideNext();showScenario()} function showScenario(){answered=false;current=scenarioQueue[idx];kicker.textContent='Emergency Scenario';question.innerHTML='Scenario '+(idx+1)+'/'+scenarioQueue.length+'<br>'+current[0]+'<br>'+current[1];answers.innerHTML='<textarea class="textarea" id="scAns"></textarea><button class="actionBtn" onclick="checkScenario()">Submit</button>';result.innerHTML=''} function checkScenario(){if(answered)return;answered=true;let ans=document.getElementById('scAns').value.toLowerCase();let found=0,miss=[];current[2].forEach(k=>ans.includes(k)?found++:miss.push(k));result.innerHTML='Score: '+found+'/'+current[2].length+'<br>Missing: '+miss.join(', ');setTimeout(()=>{idx++; if(idx>=scenarioQueue.length){question.textContent='Scenarios Finished';answers.innerHTML='';result.innerHTML='Return to menu.'}else showScenario()},2200)}
+function showProgress(){showScreen();hideNext();kicker.textContent='Progress';question.textContent='Session Progress';answers.innerHTML='<p class="contentText">Total question bank: '+questions.length+'<br>Current score: '+score+'<br>Mistakes saved: '+mistakes.length+'</p>';result.innerHTML=''} function showMistakes(){showScreen();hideNext();kicker.textContent='Mistakes';question.textContent='Mistakes';answers.innerHTML=mistakes.length?mistakes.map((m,i)=>'<p class="contentText">'+(i+1)+'. '+m+'</p>').join(''):'<p class="contentText">No mistakes yet ✅</p>';result.innerHTML=''}
 </script>
 </body>
 </html>
