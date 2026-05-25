@@ -220,31 +220,52 @@ p{
 }
 #menu{
 background:
-linear-gradient(rgba(4,12,28,.88),rgba(4,12,28,.88)),
-repeating-linear-gradient(
-0deg,
-#ffffff 0px,
-#ffffff 14px,
-#1e5aa8 14px,
-#1e5aa8 28px
-);
-border:2px solid rgba(88,166,255,.35);
+linear-gradient(rgba(2,8,23,.25),rgba(2,8,23,.35)),
+url("Menu.jpg");
+
+background-size:cover;
+background-position:center;
+background-repeat:no-repeat;
+
+min-height:850px;
+border-radius:28px;
+padding:40px 28px;
+border:2px solid rgba(88,166,255,.45);
+box-shadow:0 0 35px rgba(0,0,0,.55);
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+gap:18px;
 }
 
 #menu button{
-background:
-repeating-linear-gradient(
-0deg,
-#ffffff 0px,
-#ffffff 8px,
-#1e5aa8 8px,
-#1e5aa8 16px
-);
-color:#06101f;
 font-weight:900;
-border:2px solid #ffffff;
-box-shadow:0 4px 15px rgba(0,0,0,.35);
+font-size:22px;
+border-radius:18px;
+border:3px solid rgba(255,255,255,.9);
+box-shadow:0 6px 18px rgba(0,0,0,.45);
+text-shadow:none;
 }
+
+/* кнопка на синей полоске — белая */
+#menu button:nth-of-type(odd){
+background:rgba(255,255,255,.92);
+color:#06214a;
+}
+
+/* кнопка на белой полоске — синяя */
+#menu button:nth-of-type(even){
+background:rgba(10,74,145,.92);
+color:white;
+}
+#menu h2{
+background:rgba(2,8,23,.7);
+padding:12px;
+border-radius:16px;
+color:white;
+text-shadow:0 2px 8px black;
+}  
 </style>
 </head>
 
