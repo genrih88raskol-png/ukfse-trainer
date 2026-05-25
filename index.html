@@ -503,16 +503,37 @@ const scenarios=[
 ];
 
 let current=0, score=0, mistakes=[], currentTopic="", currentSlide=0;
+let questionQueue=[];
+let queueIndex=0;
 
 function hideNext(){document.getElementById("nextBtn").style.display="none";}
 function showNext(){document.getElementById("nextBtn").style.display="block";}
 function backToMenu(){document.getElementById("quiz").style.display="none";document.getElementById("menu").style.display="block";showNext();}
 
-function startQuiz(){showNext();document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";current=Math.floor(Math.random()*questions.length);showQuestion();}
+function startQuiz(){
+showNext();
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
+
+questionQueue=[...questions].sort(()=>0.5-Math.random());
+queueIndex=0;
+current=questions.indexOf(questionQueue[queueIndex]);
+
+showQuestion();
+}
 function showQuestion(){showNext();document.getElementById("result").innerHTML="";let q=questions[current];document.getElementById("question").innerHTML=q.topic+"<br><br>"+q.q;let html="";q.a.forEach((answer,index)=>{html+=`<button class='answer' onclick='check(${index})'>${answer}</button>`;});document.getElementById("answers").innerHTML=html;}
 function check(answer){let q=questions[current];if(answer===q.correct){score++;document.getElementById("result").innerHTML="✅ Correct | Score: "+score+"/"+questions.length;}else{mistakes.push(q.topic+": "+q.q);document.getElementById("result").innerHTML="❌ Wrong<br><br>Correct answer: "+q.a[q.correct]+"<br><br>Score: "+score+"/"+questions.length;}}
-function nextQuestion(){current=Math.floor(Math.random()*questions.length);showQuestion();}
+function nextQuestion(){
+queueIndex++;
 
+if(queueIndex>=questionQueue.length){
+questionQueue=[...questions].sort(()=>0.5-Math.random());
+queueIndex=0;
+}
+
+current=questions.indexOf(questionQueue[queueIndex]);
+showQuestion();
+}
 function startExam(){hideNext();score=0;let exam=[...questions].sort(()=>0.5-Math.random()).slice(0,20);let i=0;document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";function showExam(){let q=exam[i];document.getElementById("result").innerHTML="";document.getElementById("question").innerHTML="Question "+(i+1)+"/20<br><br>"+q.topic+"<br><br>"+q.q;let html="";q.a.forEach((answer,index)=>{html+=`<button class='answer' onclick='checkExam(${index})'>${answer}</button>`;});document.getElementById("answers").innerHTML=html;}window.checkExam=function(answer){let q=exam[i];if(answer===q.correct){score++;}else{mistakes.push(q.topic+": "+q.q);}i++;if(i>=exam.length){document.getElementById("question").innerHTML="🎓 Exam Finished";document.getElementById("answers").innerHTML="<h2>Score: "+score+"/20</h2>";document.getElementById("result").innerHTML="";return;}showExam();};showExam();}
 
 function startOral(){hideNext();document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";let q=oralQuestions[Math.floor(Math.random()*oralQuestions.length)];window.currentOral=q;document.getElementById("question").innerHTML=q.q;document.getElementById("answers").innerHTML="<textarea id='oralAnswer'></textarea><button onclick='checkOral()'>Check My Answer</button>";document.getElementById("result").innerHTML="";}
