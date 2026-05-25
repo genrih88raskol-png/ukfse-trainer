@@ -1,43 +1,110 @@
-з<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>UKFSE Trainer</title>
-
 <style>
-body{font-family:Arial,sans-serif;background:#0d1117;color:white;padding:18px;text-align:center;}
-h1{font-size:38px;margin-top:25px;color:#58a6ff;}
-.card{background:#161b22;padding:20px;border-radius:22px;margin-top:20px;}
-button{width:100%;padding:15px;margin:8px 0;font-size:18px;border:none;border-radius:14px;background:#238636;color:white;}
+:root{
+  --bg:#0d1117;
+  --card:#161b22;
+  --card2:#21262d;
+  --text:#ffffff;
+  --muted:#c9d1d9;
+  --green:#238636;
+  --green2:#2ea043;
+  --blue:#58a6ff;
+  --red:#f85149;
+  --orange:#d29922;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  text-align:center;
+  padding:18px;
+  padding-bottom:40px;
+}
+h1{font-size:38px;margin:24px 0;color:var(--blue);}
+h2{font-size:26px;margin:10px 0 16px;}
+.card{
+  background:var(--card);
+  border-radius:24px;
+  padding:20px;
+  max-width:760px;
+  margin:18px auto;
+  box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+button{
+  width:100%;
+  padding:15px;
+  margin:8px 0;
+  font-size:18px;
+  border:none;
+  border-radius:14px;
+  background:var(--green);
+  color:white;
+  cursor:pointer;
+}
+button:disabled{opacity:.55;cursor:not-allowed;}
+button.secondary{background:var(--card2);}
+button.red{background:#8b1d1d;}
 .answer{background:#30363d;}
-textarea{width:92%;height:150px;border-radius:12px;font-size:16px;padding:12px;}
-p{font-size:18px;line-height:1.45;text-align:left;}
-.small{font-size:15px;color:#c9d1d9;text-align:center;}
+.answer.correct{background:var(--green2)!important;}
+.answer.wrong{background:#8b1d1d!important;}
+textarea{
+  width:100%;
+  min-height:150px;
+  border-radius:14px;
+  border:1px solid #30363d;
+  background:#0d1117;
+  color:white;
+  font-size:16px;
+  padding:12px;
+}
+p,li{font-size:17px;line-height:1.45;text-align:left;}
+.small{font-size:14px;color:var(--muted);text-align:center;}
+.badge{
+  display:inline-block;
+  padding:6px 10px;
+  border-radius:999px;
+  background:#30363d;
+  color:var(--muted);
+  font-size:14px;
+  margin:4px;
+}
+.grid{display:grid;grid-template-columns:1fr;gap:8px;}
+@media(min-width:720px){.grid{grid-template-columns:1fr 1fr;}}
+.progressbar{width:100%;height:12px;background:#30363d;border-radius:999px;overflow:hidden;margin:12px 0;}
+.progressfill{height:100%;background:var(--green2);width:0%;}
+pre{white-space:pre-wrap;text-align:left;background:#0d1117;padding:12px;border-radius:12px;color:var(--muted);}
 </style>
 </head>
 
 <body>
-
 <h1>UKFSE Trainer</h1>
 
 <div class="card" id="menu">
-<h2>Choose Mode</h2>
-<button onclick="showStudy()">📚 Study Mode</button>
-<button onclick="startQuiz()">⚡ Quick Test</button>
-<button onclick="startExam()">🎓 Full Exam</button>
-<button onclick="startOral()">🎤 Oral Exam</button>
-<button onclick="startScenario()">🚨 Emergency Scenarios</button>
-<button onclick="showProgress()">📊 Progress</button>
-<button onclick="showMistakes()">❌ Mistakes</button>
+  <h2>Choose Mode</h2>
+  <button onclick="showStudy()">📚 Study Mode</button>
+  <button onclick="startQuiz()">⚡ Quick Test</button>
+  <button onclick="startExam()">🎓 Full Exam</button>
+  <button onclick="startOral()">🎤 Oral Exam</button>
+  <button onclick="startScenario()">🚨 Emergency Scenarios</button>
+  <button onclick="showProgress()">📊 Progress</button>
+  <button onclick="showMistakes()">❌ Mistakes</button>
+  <button class="secondary" onclick="resetSession()">🔄 Reset Session</button>
+  <p class="small">Built for UKLAP / UKFSE Grade 1 Master revision from your FSE notes.</p>
 </div>
 
 <div id="quiz" style="display:none;" class="card">
-<h2 id="question"></h2>
-<div id="answers"></div>
-<h3 id="result"></h3>
-<button id="nextBtn" onclick="nextQuestion()">Next Question</button>
-<button onclick="backToMenu()">⬅️ Back to Menu</button>
+  <h2 id="question"></h2>
+  <div id="answers"></div>
+  <h3 id="result"></h3>
+  <button id="nextBtn" onclick="nextQuestion()">Next Question</button>
+  <button class="secondary" onclick="backToMenu()">⬅️ Back to Menu</button>
 </div>
 
 <script>
@@ -45,12 +112,22 @@ const questions=[
 {q:"How many survey types are defined under HSSC?",a:["5","6","7","8"],correct:2,topic:"HSSC"},
 {q:"Which survey is a complete inspection before a ship is put into service?",a:["Annual","Initial","Intermediate","Additional"],correct:1,topic:"HSSC"},
 {q:"Which survey leads to the issue of a new certificate?",a:["Annual","Renewal","Intermediate","Bottom inspection"],correct:1,topic:"HSSC"},
+{q:"Which survey is a general inspection to ensure items remain satisfactory?",a:["Annual","Renewal","Initial","Additional"],correct:0,topic:"HSSC"},
 {q:"Which survey is carried out after important repairs or renewals?",a:["Additional","Annual","Periodical","Intermediate"],correct:0,topic:"HSSC"},
+{q:"Which survey checks specified items relevant to a certificate?",a:["Intermediate","Initial","Bottom","Passenger muster"],correct:0,topic:"HSSC"},
+{q:"Bottom inspection means inspection of:",a:["Underwater part of ship and related items","Crew cabins","Galley only","Radio equipment"],correct:0,topic:"HSSC"},
+{q:"Cargo ship bottom inspections are normally at least:",a:["Two in any 5-year period","One every 10 years","Only after grounding","Every month"],correct:0,topic:"HSSC"},
+{q:"For cargo ships, bottom inspections should not exceed intervals of:",a:["12 months","24 months","36 months","60 months"],correct:2,topic:"HSSC"},
+
 {q:"Passenger Ship Safety Certificate is normally renewed:",a:["Every 5 years","Annually","Every 3 months","Only after drydock"],correct:1,topic:"Certificates"},
-{q:"Cargo ship 300 GT or more engaged on international voyages requires:",a:["Cargo Ship Safety Radio Certificate","Passenger Ship Safety Certificate","Fishing Certificate","MLC only"],correct:0,topic:"Certificates"},
-{q:"Cargo ship 500 GT or more engaged on international voyages requires:",a:["Cargo Ship Safety Equipment Certificate","Only Safe Manning Certificate","Only OLB","Only CSR"],correct:0,topic:"Certificates"},
+{q:"Cargo ship of 300 GT or more engaged on international voyages requires:",a:["Cargo Ship Safety Radio Certificate","Passenger Ship Safety Certificate","Fishing Certificate","MLC only"],correct:0,topic:"Certificates"},
+{q:"Cargo ship of 500 GT or more engaged on international voyages requires:",a:["Cargo Ship Safety Equipment Certificate","Only Safe Manning Certificate","Only OLB","Only CSR"],correct:0,topic:"Certificates"},
 {q:"Cargo Ship Safety Construction Certificate applies to cargo ships of:",a:["100 GT or more","300 GT or more","500 GT or more","All ships"],correct:2,topic:"Certificates"},
 {q:"Most HSSC certificates, except passenger safety certificate, are valid for maximum:",a:["1 year","3 years","5 years","10 years"],correct:2,topic:"Certificates"},
+{q:"Renewal survey may be carried out up to how long before expiry?",a:["1 month","3 months","6 months","12 months"],correct:1,topic:"Certificates"},
+{q:"If renewal survey completed but new certificate not onboard before expiry, existing certificate may be endorsed up to:",a:["1 month","3 months","5 months","12 months"],correct:2,topic:"Certificates"},
+{q:"International Load Line Certificate requires usually:",a:["Annual survey each year","Only initial survey","No survey","Weekly survey"],correct:0,topic:"Certificates"},
+{q:"Cargo Ship Safety Radio Certificate requires usually:",a:["Annual survey","Periodical survey each year","Bottom survey only","No survey"],correct:1,topic:"Certificates"},
 
 {q:"ISM Code mainly concerns:",a:["Safety management","Crew nationality","Cargo freight rates","Pilot exemption"],correct:0,topic:"ISM"},
 {q:"Under ISM, the company must hold:",a:["DOC","OLB","CSR","SEA"],correct:0,topic:"ISM"},
@@ -58,12 +135,19 @@ const questions=[
 {q:"What must be carried onboard under ISM?",a:["SMC and copy of DOC","Only DOC original","Only crew list","Only charter party"],correct:0,topic:"ISM"},
 {q:"Master must operate the ship according to:",a:["Safety Management System","Port agent advice only","Crew vote","P&I rules only"],correct:0,topic:"ISM"},
 {q:"SMS must include procedures for:",a:["Emergency situations","Crew entertainment","Salary negotiation only","Cargo sale"],correct:0,topic:"ISM"},
+{q:"SMS must include:",a:["Safety and environmental protection policy","Passenger shopping list","Cargo invoice","Weather app only"],correct:0,topic:"ISM"},
+{q:"ISM includes reporting of:",a:["Accidents and non-conformities","Crew birthdays","Only port dues","Only payroll"],correct:0,topic:"ISM"},
+{q:"DOC means:",a:["Document of Compliance","Deck Officer Card","Daily Oil Certificate","Dangerous Occurrence Code"],correct:0,topic:"ISM"},
+{q:"SMC means:",a:["Safety Management Certificate","Safe Manning Card","Ship Master's Certificate","Security Manning Code"],correct:0,topic:"ISM"},
 
 {q:"ISPS Code relates to:",a:["Security","Food","Wages","Loadline"],correct:0,topic:"ISPS"},
 {q:"Ship Security Plan for UK vessels must be approved by:",a:["MCA","P&I Club","Agent","Charterer"],correct:0,topic:"ISPS"},
 {q:"SSAS means:",a:["Ship Security Alert System","Ship Safety Annual Survey","Seafarer Salary Agreement Sheet","Safety Steering Alarm System"],correct:0,topic:"ISPS"},
 {q:"ISPS applies to cargo ships engaged on international voyages of:",a:["300 GT and upwards","500 GT and upwards","1000 GT and upwards","All boats"],correct:1,topic:"ISPS"},
 {q:"SSAS should send alert to nominated 24h contact and:",a:["NMOC","Cook","Port taxi","Crew family"],correct:0,topic:"ISPS"},
+{q:"Ship Security Plan should be accompanied by:",a:["Ship Security Assessment","Fishing licence","Crew menu","Stability book only"],correct:0,topic:"ISPS"},
+{q:"ISPS aims to prevent:",a:["Illegal acts against ship, crew and passengers","Late payment only","Engine defects only","Cargo shortage only"],correct:0,topic:"ISPS"},
+{q:"DfT has policy responsibility for:",a:["Counter piracy","Crew cooking","Certificate printing","Ship painting"],correct:0,topic:"ISPS"},
 
 {q:"Minimum age to work onboard under UK MLC rules is:",a:["14","15","16","18"],correct:2,topic:"MLC"},
 {q:"Young seafarers under 18 generally must not work:",a:["At night","On deck","In port","With master"],correct:0,topic:"MLC"},
@@ -74,174 +158,69 @@ const questions=[
 {q:"Food and drinking water inspection must be:",a:["Not less than once a week","Daily only","Annually","Only after complaint"],correct:0,topic:"MLC"},
 {q:"Qualified ship's cook requirement does not apply to ships operating with fewer than:",a:["5 seafarers","10 seafarers","15 seafarers","20 seafarers"],correct:1,topic:"MLC"},
 {q:"Shipowner medical expense liability can be limited to:",a:["16 weeks","3 days","1 month","5 years"],correct:0,topic:"MLC"},
+{q:"Maritime Labour Certificate validity is:",a:["5 years","1 year","10 years","Unlimited"],correct:0,topic:"MLC"},
+{q:"Interim Maritime Labour Certificate validity maximum is:",a:["1 month","3 months","6 months","12 months"],correct:2,topic:"MLC"},
+{q:"Maritime Labour Certificate requires intermediate survey:",a:["Between second and third year","Every week","Only after detention","At 10 years"],correct:0,topic:"MLC"},
+{q:"MLC covers:",a:["SEA, wages, repatriation, accommodation, food and medical care","COLREG only","Pilotage only","Cargo claims only"],correct:0,topic:"MLC"},
+{q:"If a seafarer is held captive due piracy or armed robbery, SEA:",a:["Continues in effect","Automatically ends","Becomes invalid","Must be destroyed"],correct:0,topic:"MLC"},
+{q:"During captivity, wages and entitlements:",a:["Continue to be paid","Stop immediately","Are optional","Only paid by agent"],correct:0,topic:"MLC"},
 
 {q:"Official Log Book page 1 entries must be made by:",a:["Master","Agent","Cook","Any rating"],correct:0,topic:"OLB"},
 {q:"Drill entries in OLB must be signed by:",a:["Master and one crew member","Agent only","P&I only","Cook only"],correct:0,topic:"OLB"},
 {q:"Steering gear must be tested:",a:["Within 12 hours before sailing","Once per year","Only in drydock","After arrival"],correct:0,topic:"OLB"},
+{q:"Emergency steering systems must be tested:",a:["Every 3 months","Every 5 years","Only after PSC","Daily"],correct:0,topic:"OLB"},
 {q:"Crew accommodation inspection is recorded in:",a:["Official Log Book","Passport","Charter party","Bill of lading"],correct:0,topic:"OLB"},
 {q:"OLB should normally be closed:",a:["6 months after first entry","Weekly","Only when vessel sold","Every 5 years"],correct:0,topic:"OLB"},
 {q:"If an OLB entry is wrong, correction is made by:",a:["Further signed entry","Deleting the old entry","Using correction fluid","Ignoring it"],correct:0,topic:"OLB"},
+{q:"OLB narrative section includes:",a:["Accidents, complaints, deaths, change of Master","Only weather","Only menu","Only bunkers"],correct:0,topic:"OLB"},
+{q:"Annex to OLB may be used when:",a:["Entry is too long","Master dislikes writing","Crew asks","Agent requires"],correct:0,topic:"OLB"},
 
 {q:"MAIB accident report should normally be sent within:",a:["24 hours","7 days","14 days","1 month"],correct:0,topic:"MAIB"},
 {q:"Serious injury report may be sent within:",a:["14 days","24 hours","6 months","1 year"],correct:0,topic:"MAIB"},
 {q:"Evidence after accident must be preserved until released or normally for:",a:["28 days","3 days","7 days","5 years"],correct:0,topic:"MAIB"},
 {q:"IRF means:",a:["Incident Report Form","International Radio Form","Inspection Record File","Internal Risk Form"],correct:0,topic:"MAIB"},
 {q:"Reportable accident includes:",a:["Grounding","Late dinner","Minor paint scratch only","Crew complaint only"],correct:0,topic:"MAIB"},
+{q:"MAIB investigates accidents to:",a:["Improve marine safety","Punish crew only","Issue passports","Sell cargo"],correct:0,topic:"MAIB"},
+{q:"Major injury includes:",a:["Fracture except fingers/thumbs/toes","Small bruise","Headache only","Late arrival"],correct:0,topic:"MAIB"},
+{q:"Man overboard is:",a:["Reportable accident","Not reportable","Only company matter","Only agent matter"],correct:0,topic:"MAIB"},
 
 {q:"Each crew member must participate monthly in:",a:["Abandon ship and fire drill","Only cleaning","Only payroll check","Only toolbox talk"],correct:0,topic:"Drills"},
 {q:"If more than 25% crew changed, drills should be held within:",a:["24 hours of leaving port","7 days","1 month","Next drydock"],correct:0,topic:"Drills"},
 {q:"Passenger muster for voyages over 24 hours must occur within:",a:["24 hours of embarkation","7 days","At arrival","Only if requested"],correct:0,topic:"Drills"},
 {q:"Muster list must be kept up to date by:",a:["Master","Agent","Cook","Passenger"],correct:0,topic:"Drills"},
+{q:"Muster list copies should be displayed in:",a:["Bridge, engine room and crew accommodation","Only galley","Only cargo office","Only master cabin"],correct:0,topic:"Drills"},
+{q:"General emergency alarm is for:",a:["Summoning to muster stations","Immediate abandon ship only","Dinner time","Engine test"],correct:0,topic:"Drills"},
 
 {q:"Safety Officer is required where at least how many persons are employed?",a:["5","10","15","20"],correct:0,topic:"Safety"},
 {q:"Safety Officer inspections of accessible work areas should be at least:",a:["Every 3 months","Every 5 years","Every year","Only after accident"],correct:0,topic:"Safety"},
 {q:"Safety Committee is chaired by:",a:["Master","Agent","Cook","Port State Control"],correct:0,topic:"Safety"},
 {q:"Risk assessments should cover:",a:["All work activities onboard","Only navigation","Only catering","Only certificates"],correct:0,topic:"Safety"},
+{q:"Safety Officer may stop work if:",a:["It may cause an accident","It is raining","Crew asks for tea","Agent is late"],correct:0,topic:"Safety"},
+{q:"Safety representative needs at least:",a:["2 years sea service since age 18","One week onboard","No experience","Pilotage certificate"],correct:0,topic:"Safety"},
 
 {q:"Certificate of British Registry proves:",a:["Nationality and tonnages","Ownership and mortgages","Crew competence","ISM compliance"],correct:0,topic:"Registry"},
 {q:"Certificate of British Registry is valid maximum:",a:["5 years","1 year","10 years","Unlimited"],correct:0,topic:"Registry"},
 {q:"CSR provides onboard record of:",a:["History of the ship","Crew wages","Food menu","Weather forecast"],correct:0,topic:"Registry"},
 {q:"If Certificate of Registry is lost abroad, master should apply for:",a:["Provisional Certificate of British Registry","New passport","New DOC","New SMC"],correct:0,topic:"Registry"},
+{q:"Certificate of British Registry does NOT prove:",a:["Ownership","Nationality","Tonnage","Port of registry"],correct:0,topic:"Registry"},
+{q:"SIN and CSR are linked to:",a:["SOLAS Chapter XI-1","COLREG Rule 10","MARPOL Annex VI only","MLC Title 2 only"],correct:0,topic:"Registry"},
 
 {q:"Seaman left behind may be:",a:["Hospitalised, absent, detained or imprisoned","Only dead","Only on leave","Only dismissed"],correct:0,topic:"Scenarios"},
 {q:"When seaman is left behind, master must inform:",a:["Agent, authorities, P&I, proper officer, owner/manager","Only cook","Only passengers","Nobody"],correct:0,topic:"Scenarios"},
 {q:"British Consul is also known in legislation as:",a:["Proper officer","Shipowner","Safety officer","PSC inspector"],correct:0,topic:"Consul"},
 {q:"British Consul can help with:",a:["Crew matters, OLB, protests, deaths, repatriation","Cargo sale only","Engine repair only","Weather routing only"],correct:0,topic:"Consul"},
+{q:"A British Consul may register:",a:["Protests by masters","Crew hobbies","Cargo values","Weather reports"],correct:0,topic:"Consul"},
+{q:"If seaman left behind at non-UK port, proper officer:",a:["Must be informed","Must be ignored","Only informed next year","Only if agent agrees"],correct:0,topic:"Consul"},
+
 {q:"Two major oil pollution offences may carry maximum fine of:",a:["£250,000","£5,000","£500","£30,000"],correct:0,topic:"Penalties"},
-{q:"MLC detention may occur if conditions are hazardous to:",a:["Safety, health or security of seafarers","Paint colour","Office comfort","Cargo price"],correct:0,topic:"MLC"}
-,
+{q:"MLC detention may occur if conditions are hazardous to:",a:["Safety, health or security of seafarers","Paint colour","Office comfort","Cargo price"],correct:0,topic:"Penalties"},
+{q:"Security mentioned for release of detained ship may be:",a:["£30,000","£300","£3,000","£250,000 only"],correct:0,topic:"Penalties"},
+{q:"Repeated serious MLC breaches may lead to:",a:["Detention","Bonus","Free certificate","No action"],correct:0,topic:"Penalties"},
 
-{
-q:"What document records major ship history changes?",
-a:["Official Log Book","CSR","Crew List","DOC"],
-correct:1
-},
-
-{
-q:"CSR stands for:",
-a:["Continuous Synopsis Record",
-"Certificate of Safety Record",
-"Continuous Safety Register",
-"Crew Service Report"],
-correct:0
-},
-
-{
-q:"Who issues a CSR?",
-a:["Ship Master",
-"Flag Administration",
-"Port State Control",
-"Chief Engineer"],
-correct:1
-},
-
-{
-q:"Which entries must be recorded in Official Log Book?",
-a:["Weather only",
-"Navigation only",
-"Accidents, discipline and important events",
-"Cargo quantity only"],
-correct:2
-},
-
-{
-q:"MLC mainly protects:",
-a:["Cargo",
-"Seafarers",
-"Passengers",
-"Fishing vessels"],
-correct:1
-},
-
-{
-q:"MLC covers:",
-a:["Ship stability",
-"Wages and working conditions",
-"Pilotage",
-"Load lines"],
-correct:1
-},
-
-{
-q:"Who checks Safe Manning requirements?",
-a:["Cook",
-"Flag State",
-"Passengers",
-"Port agent"],
-correct:1
-},
-
-{
-q:"If crew falls below Safe Manning:",
-a:["Continue voyage normally",
-"Inform company and assess voyage safety",
-"Ignore deficiency",
-"Increase speed"],
-correct:1
-},
-
-{
-q:"Who assists seafarers abroad if abandoned?",
-a:["Consul",
-"Pilot",
-"Harbour Master",
-"Surveyor"],
-correct:0
-},
-
-{
-q:"Consul may help with:",
-a:["Repatriation",
-"Cargo loading",
-"Bunkering",
-"Stability calculations"],
-correct:0
-},
-
-{
-q:"Port State Control detention means:",
-a:["Ship delayed for weather",
-"Ship prohibited from sailing due deficiencies",
-"Cargo delay",
-"Customs inspection"],
-correct:1
-},
-
-{
-q:"Repeated serious deficiencies may result in:",
-a:["Reward",
-"Detention or penalties",
-"No action",
-"Free survey"],
-correct:1
-},
-
-{
-q:"Who signs Official Log Book entries?",
-a:["Passengers",
-"Master and witness",
-"Chief cook",
-"Pilot"],
-correct:1
-},
-
-{
-q:"MAIB investigates accidents to:",
-a:["Punish crew",
-"Improve marine safety",
-"Calculate cargo",
-"Issue certificates"],
-correct:1
-},
-
-{
-q:"Evidence after accident should:",
-a:["Be destroyed",
-"Be preserved",
-"Be ignored",
-"Be rewritten"],
-correct:1
-}
+{q:"ACS stands for:",a:["Alternative Compliance Scheme","Annual Cargo Survey","Approved Crew System","Automatic Certificate System"],correct:0,topic:"ACS"},
+{q:"ACS delegates most survey work to:",a:["Recognised Organisations / Class","Crew only","Agent","Passengers"],correct:0,topic:"ACS"},
+{q:"Under ACS, MCA retains oversight through:",a:["ACS inspections, ISM/ISPS audits and MLC inspections","Cooking checks only","Cargo sale","Weather reports"],correct:0,topic:"ACS"},
+{q:"Under ACS, ISM, ISPS and MLC remain responsibility of:",a:["MCA","Cook","Charterer","Port taxi"],correct:0,topic:"ACS"}
 ];
 
 const studyData={
@@ -254,6 +233,8 @@ const studyData={
 "Intermediate Survey: inspection of specified items relevant to the certificate.",
 "Annual Survey: general inspection to ensure items remain maintained and satisfactory.",
 "Bottom Inspection: inspection of underwater part of ship and related items.",
+"Passenger ships: bottom inspection required every year; at least two out-of-water inspections in any 5-year period, intervals not exceeding 36 months.",
+"Cargo ships: minimum two bottom inspections in any 5-year period, intervals not exceeding 36 months.",
 "Additional Survey: after repair, investigation, important repair or renewal.",
 "Exam memory: Initial = before service. Renewal = new certificate. Annual = general check. Additional = after repair."
 ],
@@ -267,7 +248,27 @@ const studyData={
 "Passenger Ship Safety Certificate is renewed annually.",
 "Renewal survey may be carried out up to 3 months before expiry.",
 "Certificate may be extended up to 3 months in some circumstances.",
-"If renewal survey completed but certificate cannot be issued onboard before expiry, existing certificate may be endorsed for up to 5 months."
+"If renewal survey completed but certificate cannot be issued onboard before expiry, existing certificate may be endorsed for up to 5 months.",
+"Cargo Ship Safety Radio Certificate requires periodical survey each year.",
+"Cargo Ship Safety Equipment Certificate requires annual survey each year; second or third year may be replaced by periodical survey.",
+"International Load Line Certificate requires annual survey each year.",
+"Exam memory: Passenger certificate = annual. Most cargo certificates = 5 years."
+],
+"ACS & Recognised Organisations":[
+"ACS = Alternative Compliance Scheme.",
+"ACS streamlines survey and certification process.",
+"ACS maintains standards and minimises duplication with Recognised Organisations.",
+"ACS delegates all survey work to UK authorised Recognised Organisations.",
+"MCA maintains oversight through ACS inspections, ISM audits, ISPS audits and MLC inspections.",
+"All statutory certificates except ISM DOC/SMC, ISSC and MLC Certificate are issued by UK Recognised Organisations.",
+"Load Line, Safety Radio, Safety Construction and MARPOL surveys are fully delegated to Class.",
+"Safety Equipment surveys should be arranged through MCA Customer Service Manager or local MCA Marine Office.",
+"MCA may authorise Class to carry Safety Equipment survey case by case.",
+"MCA conducts Safety Equipment surveys in UK, at 1 survey in 5, or after detention / where MCA feels need.",
+"Ships on ACS can arrange all surveys directly with Classification Society except ISM, ISPS and MLC.",
+"Ships not classed should contact MCA for surveys.",
+"Recognised Organisations must cooperate with Port State Control.",
+"Recognised Organisations must provide MCA information about class changes or declassing."
 ],
 "ISM Code":[
 "Every company must comply with ISM Code requirements.",
@@ -282,6 +283,8 @@ const studyData={
 "SMS includes procedures for reporting accidents and non-conformities.",
 "SMS includes emergency preparedness procedures.",
 "SMS includes internal audits and management reviews.",
+"ISM Part A contains implementation requirements.",
+"ISM Part B contains certification and verification requirements.",
 "Exam memory: DOC = Company. SMC = Ship. SMS = system."
 ],
 "ISPS Code":[
@@ -296,7 +299,25 @@ const studyData={
 "ISPS applies to passenger ships on international voyages.",
 "ISPS applies to cargo ships, including high-speed craft, of 500 GT and upwards.",
 "ISPS applies to mobile offshore drilling units.",
-"UK extended ISPS to certain domestic passenger ships and tankers."
+"UK extended ISPS to certain domestic passenger ships and tankers.",
+"MGN 440 gives guidance on piracy, armed robbery and violence against merchant shipping.",
+"DfT has responsibility for counter piracy policy."
+],
+"STCW Manila":[
+"STCW is the International Convention on Standards of Training, Certification and Watchkeeping for Seafarers.",
+"STCW gives minimum legal standards for qualifications and training at sea.",
+"STCW is overseen by IMO.",
+"STCW was originally ratified in 1978.",
+"Major amendments were agreed in 1995.",
+"Further major revisions were adopted in Manila in June 2010.",
+"Manila Amendments came into force on 1 January 2012.",
+"UK adopted new STCW 2010 training and certification requirements from July 2013.",
+"Deck officers applying for CoC after specified dates require HELM training.",
+"All deck officers must undertake generic ECDIS training before applying for or revalidating UK CoC.",
+"Deck officers without ECDIS requirement may receive limitation that certificate is not valid on ships fitted with ECDIS.",
+"Type-specific ECDIS training is required when ECDIS is primary means of navigation.",
+"Mandatory security training includes Security Awareness, Security Familiarisation, Designated Security Duties and Ship Security Officer as appropriate.",
+"Exam memory: Manila = updated training, ECDIS, HELM, security training and modern competency standards."
 ],
 "MLC":[
 "MLC covers seafarers' working and living conditions.",
@@ -318,7 +339,9 @@ const studyData={
 "Crew accommodation must be inspected at intervals not exceeding 7 days.",
 "Food and drinking water must be inspected not less than once a week.",
 "Qualified cook requirement normally applies unless ship operates with fewer than 10 seafarers or within 60 miles safe haven.",
-"Shipowner medical expense liability may be limited to 16 weeks."
+"Shipowner medical expense liability may be limited to 16 weeks.",
+"Shipowner must provide repatriation when SEA expires, is terminated, seafarer is ill/injured, shipwreck occurs, insolvency occurs or ship is bound for war zone without consent.",
+"Shipowner may be liable for burial or cremation expenses if seafarer dies onboard or on shore leave abroad."
 ],
 "Official Log Book":[
 "All entries on page 1 must be made by Master.",
@@ -332,7 +355,9 @@ const studyData={
 "Crew accommodation inspections must be recorded in OLB.",
 "Food and water inspections must be recorded in OLB.",
 "Narrative section includes accidents, casualties, disciplinary matters, complaints, deaths, changes of Master and closing of OLB.",
+"Narrative section also records crew left behind, desertions, promotions, demotions, safety officers, safety representatives and safety committee meetings.",
 "Annexes may be used if entry is too long.",
+"Annexed documents are treated as part of OLB and must be signed.",
 "Incorrect entry should not be erased; make further signed entry correcting it.",
 "OLB should normally be closed 6 months after first entry.",
 "OLB delivery should be within 48 hours after specified time, or as soon as practicable."
@@ -341,6 +366,7 @@ const studyData={
 "MAIB = Marine Accident Investigation Branch.",
 "Accident report must be sent to Chief Inspector by quickest means available and within 24 hours.",
 "Reportable accidents include death, major injury, man overboard, grounding, collision, fire, explosion, weather damage, pollution and disabled ship.",
+"Reportable accident also includes ship lost, presumed lost or abandoned.",
 "Major injury includes fracture except fingers/toes, limb loss, dislocation, loss of sight, eye injury, hypothermia, unconsciousness, resuscitation or hospitalisation over 24h.",
 "Serious injury is not major injury but causes incapacity for more than 3 consecutive days.",
 "Serious injury may be reported within 14 days.",
@@ -378,7 +404,10 @@ const studyData={
 "Safety Committee includes Master as chairman, Safety Officer and safety representatives.",
 "Safety Committee should improve safety consciousness and ensure compliance with CoSWP, MSNs and MGNs.",
 "Risk assessments should cover all work activities onboard.",
-"Master should ensure risk assessments are carried out for new work or new situations."
+"Master should ensure risk assessments are carried out for new work or new situations.",
+"Fresh Water Safety Plan should cover source water, treatment, storage and distribution.",
+"Fresh water tanks should be thoroughly pumped out where necessary prior to refilling at 6-month intervals.",
+"Fresh water tanks should be opened, emptied, ventilated, inspected, cleaned and disinfected at 12-month intervals."
 ],
 "Registry & CSR":[
 "Certificate of British Registry establishes ship nationality and tonnages.",
@@ -391,7 +420,8 @@ const studyData={
 "CSR = Continuous Synopsis Record.",
 "CSR provides onboard record of history of ship.",
 "CSR includes flag state, registration date, SIN, port of registry and owner details.",
-"SIN and CSR are SOLAS Chapter XI-1 special measures linked with ISPS."
+"SIN and CSR are SOLAS Chapter XI-1 special measures linked with ISPS.",
+"SIN must be permanently marked in visible places such as stern, hull sides, superstructure or horizontal surface on passenger ships."
 ],
 "Consul & Left Behind":[
 "British Consul protects interests of British ship regardless of nationality of Master or crew.",
@@ -399,11 +429,32 @@ const studyData={
 "Consul duties include crew engagement/discharge, crew agreements, wages, repatriation, births/deaths, OLB and protests.",
 "Consul has powers of notary public and commissioner for oaths.",
 "Consul may register protests by Masters.",
+"Consul has duty to warn British shipmasters of dangers and port regulations.",
 "Seaman left behind includes hospitalised, absent without leave, detained or imprisoned person at time of sailing.",
 "Master must record seaman left behind in OLB and List of Crew.",
 "Agent, immigration, P&I correspondent, proper officer and shipowner/manager should be informed.",
 "Generally seaman left behind should be discharged from Crew Agreement in absence.",
-"If left behind at non-UK port, proper officer must be informed."
+"If left behind at non-UK port, proper officer must be informed.",
+"List of Crew ashore should be kept up to date by shipowner; Master notifies crew changes as soon as practicable and within 3 days."
+],
+"Death on Board":[
+"Consult the Ship Captain's Medical Guide.",
+"Establish cause of death if possible.",
+"If doctor is available, have cause of death certified.",
+"Obtain witness statements as soon as possible.",
+"Inform shipowner or manager as soon as possible.",
+"Check Safe Manning Document to decide if replacement is required before proceeding.",
+"If in or near port, inform agent and request port authorities are informed.",
+"Inform next of kin as soon as possible and in any case within 3 days.",
+"Inform P&I Club correspondent.",
+"If death may be accidental, Safety Officer should investigate and make accident log entry.",
+"Preserve the body if possible, normally by chilling.",
+"If accidental, inform MAIB within 24 hours.",
+"Make appropriate OLB entries.",
+"Complete Return of Births and Deaths form.",
+"If deceased was on List of Crew, complete relevant List of Crew spaces.",
+"Record service in Discharge Book and mark deceased if applicable.",
+"Two officers should tally and pack personal property; attach tally sheet as OLB annex."
 ],
 "Penalties & Detention":[
 "MLC offences may be punishable on summary conviction by fine.",
@@ -416,38 +467,6 @@ const studyData={
 "Oil discharged into UK national waters may carry £250,000 fine.",
 "Exam memory: pollution offences are among the highest fines."
 ]
-,
-"ACS & Recognised Organisations":[
-"ACS = Alternative Compliance Scheme.",
-"ACS streamlines survey and certification while maintaining standards.",
-"ACS reduces duplication between MCA and Recognised Organisations.",
-"ACS delegates survey work to UK authorised Recognised Organisations.",
-"MCA keeps oversight through ACS inspections, ISM audits, ISPS audits and MLC inspections.",
-"Under ACS, most statutory certificates are issued by UK Recognised Organisations.",
-"ISM DOC/SMC, ISSC and MLC Certificate remain MCA responsibility.",
-"Surveys for Load Line, Safety Radio, Safety Construction and MARPOL are fully delegated to Class.",
-"Safety Equipment surveys should normally be arranged through MCA CSM or local MCA Marine Office.",
-"Ships on ACS can arrange all surveys directly with Classification Society except ISM, ISPS and MLC.",
-"Exam memory: ACS = Class does surveys, MCA keeps oversight."
-],
-
-"Death on Board":[
-"Consult the Ship Captain's Medical Guide.",
-"Establish cause of death if possible.",
-"If doctor is available, have cause of death certified.",
-"Obtain witness statements as soon as possible.",
-"Inform shipowner or manager as soon as possible.",
-"Check Safe Manning Document to see if replacement is required before proceeding to sea.",
-"If in or near port, inform agent and request port authorities are informed.",
-"Inform next of kin as soon as possible and in any case within 3 days.",
-"Inform P&I Club correspondent.",
-"If death may be accidental, Safety Officer should investigate and make accident log entry.",
-"Preserve the body if possible, normally by chilling.",
-"If accidental, inform MAIB within 24 hours.",
-"Make appropriate Official Log Book entries.",
-"Complete Return of Births and Deaths form.",
-"Handle deceased seafarer's property: two officers tally and pack property, attach tally as OLB annex."
-]  
 };
 
 const oralQuestions=[
@@ -475,18 +494,12 @@ const oralQuestions=[
 {q:"Captain, what is CSR?",key:["continuous synopsis record","history","ship"]},
 {q:"Captain, what actions if seaman left behind abroad?",key:["olb","list of crew","proper officer","agent","owner"]},
 {q:"Captain, what can British Consul assist with?",key:["proper officer","crew","wages","olb","repatriation"]},
-{q:"Captain, what are high pollution penalties?",key:["oil","£250000","master"]}
-,
-{q:"Captain, what is the purpose of the Official Log Book?",key:["record","official","events","crew"]},
-{q:"Captain, what entries are made in the OLB narrative section?",key:["accidents","casualties","complaints","deaths","disciplinary"]},
-{q:"Captain, what must you do if a seafarer is left behind abroad?",key:["olb","list of crew","proper officer","agent","owner"]},
-{q:"Captain, what is the purpose of CSR?",key:["history","ship","flag","owner"]},
-{q:"Captain, what does Certificate of British Registry prove?",key:["nationality","tonnage","not ownership"]},
-{q:"Captain, what are your actions after a death onboard?",key:["medical guide","owner","next of kin","olb","maib"]},
-{q:"Captain, when do you report to MAIB?",key:["accident","24 hours","quickest means"]},
-{q:"Captain, what is the role of British Consul?",key:["proper officer","crew","wages","repatriation","olb"]},
-{q:"Captain, what can lead to detention under MLC?",key:["hazardous","safety","health","security","serious breach"]},
-{q:"Captain, explain Master's responsibility for cadets.",key:["duties","training","supervision","not cheap labour"]}  
+{q:"Captain, what are high pollution penalties?",key:["oil","£250000","master"]},
+{q:"Captain, explain ACS.",key:["alternative compliance scheme","recognised organisations","mca","surveys"]},
+{q:"Captain, what remains MCA responsibility under ACS?",key:["ism","isps","mlc"]},
+{q:"Captain, what are Master's responsibilities for cadets?",key:["duties","training","supervision","not cheap labour"]},
+{q:"Captain, what do you do after death onboard?",key:["medical guide","owner","next of kin","olb","maib"]},
+{q:"Captain, explain fresh water safety management.",key:["risk assessment","source","treatment","storage","distribution"]}
 ];
 
 const scenarios=[
@@ -499,96 +512,271 @@ const scenarios=[
 {title:"Fire drill not possible",question:"Monthly drill cannot be held because weather makes it unsafe. What do you record?",points:["olb","reason","unsafe","next opportunity"]},
 {title:"OLB wrong entry",question:"You find wrong name entered in OLB. How do you correct it?",points:["further entry","sign","refer","amend"]},
 {title:"Lost Certificate of Registry abroad",question:"Certificate of Registry lost abroad. What do you do?",points:["proper officer","declaration","provisional certificate","ship particulars"]},
-{title:"SSAS activation",question:"Security threat detected and SSAS activated. What do you expect?",points:["covert","24 hour contact","nmoc","security plan","company"]}
+{title:"SSAS activation",question:"Security threat detected and SSAS activated. What do you expect?",points:["covert","24 hour contact","nmoc","security plan","company"]},
+{title:"More than 25% crew changed",question:"More than 25% crew have not drilled onboard in previous month. What is required?",points:["drill","24 hours","leaving port","fire","abandon ship"]},
+{title:"MLC wages complaint",question:"Seafarer complains wages are late. What should you know?",points:["wages","account","monthly","20%","agreement"]},
+{title:"PSC asks about Muster List",question:"PSC asks where muster lists are posted and what they contain.",points:["bridge","engine room","crew accommodation","duties","signals"]},
+{title:"Fresh water contamination",question:"Fresh water suspected contaminated. What action?",points:["risk assessment","drain","super chlorinate","flush","samples"]},
+{title:"Stowaway discovered",question:"A stowaway is found onboard after departure. What do you consider?",points:["vigilance","search","authorities","owner","security","record"]}
 ];
 
-let current=0, score=0, mistakes=[], currentTopic="", currentSlide=0;
+let current=0;
+let score=0;
+let mistakes=[];
+let currentTopic="";
+let currentSlide=0;
 let questionQueue=[];
 let queueIndex=0;
 let answered=false;
-let quizFinished=false;
 let quizAnsweredCount=0;
 let quizScore=0;
-  
+let oralQueue=[];
+let oralIndex=0;
+let scenarioQueue=[];
+let scenarioIndex=0;
+
 function hideNext(){document.getElementById("nextBtn").style.display="none";}
 function showNext(){document.getElementById("nextBtn").style.display="block";}
 function backToMenu(){document.getElementById("quiz").style.display="none";document.getElementById("menu").style.display="block";showNext();}
+function resetSession(){score=0;mistakes=[];quizScore=0;quizAnsweredCount=0;alert("Session reset");}
 
 function startQuiz(){
 showNext();
-
 score=0;
 quizScore=0;
 quizAnsweredCount=0;
 answered=false;
-quizFinished=false;
-
 document.getElementById("menu").style.display="none";
 document.getElementById("quiz").style.display="block";
-
 questionQueue=[...questions].sort(()=>0.5-Math.random());
 queueIndex=0;
 current=questions.indexOf(questionQueue[queueIndex]);
-
 showQuestion();
 }
-}
-function showQuestion()answered=false;{showNext();document.getElementById("result").innerHTML="";let q=questions[current];document.getElementById("question").innerHTML=q.topic+"<br><br>"+q.q;let html="";q.a.forEach((answer,index)=>{html+=`<button class='answer' onclick='check(${index})'>${answer}</button>`;});document.getElementById("answers").innerHTML=html;}
-function check(answer){
 
-if(answered){return;}
-
-answered=true;
-
+function showQuestion(){
+showNext();
+answered=false;
+document.getElementById("result").innerHTML="";
 let q=questions[current];
+document.getElementById("question").innerHTML=
+"Question "+(quizAnsweredCount+1)+"/"+questionQueue.length+
+"<br><br>"+q.topic+"<br><br>"+q.q;
+let html="";
+q.a.forEach((answer,index)=>{html+=`<button class='answer' onclick='check(${index})'>${answer}</button>`;});
+document.getElementById("answers").innerHTML=html;
+}
 
-document.querySelectorAll(".answer").forEach(btn=>{
+function check(answer){
+if(answered){return;}
+answered=true;
+let q=questions[current];
+let buttons=document.querySelectorAll(".answer");
+buttons.forEach((btn,i)=>{
 btn.disabled=true;
-btn.style.opacity="0.6";
+btn.style.opacity="0.65";
+if(i===q.correct){btn.classList.add("correct");}
+if(i===answer && answer!==q.correct){btn.classList.add("wrong");}
 });
-
 if(answer===q.correct){
 score++;
 quizScore++;
-document.getElementById("result").innerHTML=
-"✅ Correct | Score: "+quizScore+"/"+questionQueue.length;
+document.getElementById("result").innerHTML="✅ Correct | Score: "+quizScore+"/"+questionQueue.length;
 }else{
 mistakes.push(q.topic+": "+q.q);
-document.getElementById("result").innerHTML=
-"❌ Wrong<br><br>Correct answer: "+q.a[q.correct]+"<br><br>Score: "+quizScore+"/"+questionQueue.length;
+document.getElementById("result").innerHTML="❌ Wrong<br><br>Correct answer: "+q.a[q.correct]+"<br><br>Score: "+quizScore+"/"+questionQueue.length;
 }
-
 quizAnsweredCount++;
-
 }
+
 function nextQuestion(){
-queueIndex++;
-
-if(queueIndex>=questionQueue.length){
-questionQueue=[...questions].sort(()=>0.5-Math.random());
-queueIndex=0;
+if(!answered){
+document.getElementById("result").innerHTML="Answer this question first.";
+return;
 }
-
+queueIndex++;
+if(queueIndex>=questionQueue.length){
+hideNext();
+document.getElementById("question").innerHTML="⚡ Quick Test Finished";
+document.getElementById("answers").innerHTML="<h2>Score: "+quizScore+"/"+questionQueue.length+"</h2><p>All questions completed. Return to menu to start again.</p>";
+document.getElementById("result").innerHTML="";
+return;
+}
 current=questions.indexOf(questionQueue[queueIndex]);
 showQuestion();
 }
-function startExam(){hideNext();score=0;let exam=[...questions].sort(()=>0.5-Math.random()).slice(0,20);let i=0;document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";function showExam(){let q=exam[i];document.getElementById("result").innerHTML="";document.getElementById("question").innerHTML="Question "+(i+1)+"/20<br><br>"+q.topic+"<br><br>"+q.q;let html="";q.a.forEach((answer,index)=>{html+=`<button class='answer' onclick='checkExam(${index})'>${answer}</button>`;});document.getElementById("answers").innerHTML=html;}window.checkExam=function(answer){let q=exam[i];if(answer===q.correct){score++;}else{mistakes.push(q.topic+": "+q.q);}i++;if(i>=exam.length){document.getElementById("question").innerHTML="🎓 Exam Finished";document.getElementById("answers").innerHTML="<h2>Score: "+score+"/20</h2>";document.getElementById("result").innerHTML="";return;}showExam();};showExam();}
 
-function startOral(){hideNext();document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";let q=oralQuestions[Math.floor(Math.random()*oralQuestions.length)];window.currentOral=q;document.getElementById("question").innerHTML=q.q;document.getElementById("answers").innerHTML="<textarea id='oralAnswer'></textarea><button onclick='checkOral()'>Check My Answer</button>";document.getElementById("result").innerHTML="";}
-function checkOral(){let answer=document.getElementById("oralAnswer").value.toLowerCase();let q=window.currentOral;let found=0, missed=[];q.key.forEach(k=>{if(answer.includes(k)){found++;}else{missed.push(k);}});document.getElementById("result").innerHTML="Score: "+found+"/"+q.key.length+"<br><br>Missed points:<br>"+missed.join("<br>");}
+function startExam(){
+hideNext();
+score=0;
+let exam=[...questions].sort(()=>0.5-Math.random()).slice(0,30);
+let i=0;
+let examAnswered=false;
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
+function showExam(){
+examAnswered=false;
+let q=exam[i];
+document.getElementById("result").innerHTML="";
+document.getElementById("question").innerHTML="Question "+(i+1)+"/30<br><br>"+q.topic+"<br><br>"+q.q;
+let html="";
+q.a.forEach((answer,index)=>{html+=`<button class='answer' onclick='checkExam(${index})'>${answer}</button>`;});
+document.getElementById("answers").innerHTML=html;
+}
+window.checkExam=function(answer){
+if(examAnswered){return;}
+examAnswered=true;
+let q=exam[i];
+document.querySelectorAll(".answer").forEach((btn,idx)=>{
+btn.disabled=true;
+btn.style.opacity="0.65";
+if(idx===q.correct){btn.classList.add("correct");}
+if(idx===answer && answer!==q.correct){btn.classList.add("wrong");}
+});
+if(answer===q.correct){score++;}else{mistakes.push(q.topic+": "+q.q);}
+setTimeout(()=>{
+i++;
+if(i>=exam.length){
+document.getElementById("question").innerHTML="🎓 Full Exam Finished";
+document.getElementById("answers").innerHTML="<h2>Score: "+score+"/30</h2><p>Return to menu to start a new exam.</p>";
+document.getElementById("result").innerHTML="";
+return;
+}
+showExam();
+},650);
+};
+showExam();
+}
 
-function startScenario(){hideNext();document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";let s=scenarios[Math.floor(Math.random()*scenarios.length)];window.currentScenario=s;document.getElementById("question").innerHTML="🚨 "+s.title+"<br><br>"+s.question;document.getElementById("answers").innerHTML="<textarea id='scenarioAnswer'></textarea><button onclick='checkScenario()'>Submit</button>";document.getElementById("result").innerHTML="";}
-function checkScenario(){let answer=document.getElementById("scenarioAnswer").value.toLowerCase();let s=window.currentScenario;let found=0, missed=[];s.points.forEach(p=>{if(answer.includes(p)){found++;}else{missed.push(p);}});document.getElementById("result").innerHTML="Score: "+found+"/"+s.points.length+"<br><br>Missing points:<br>"+missed.join("<br>");}
+function startOral(){
+hideNext();
+answered=false;
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
+oralQueue=[...oralQuestions].sort(()=>0.5-Math.random());
+oralIndex=0;
+showOral();
+}
 
-function showProgress(){hideNext();document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";let percent=Math.round((score/questions.length)*100);document.getElementById("question").innerHTML="📊 Progress";document.getElementById("answers").innerHTML="<p>Total Questions: "+questions.length+"</p><p>Current Score: "+score+"</p><p>Progress: "+percent+"%</p><p>Mistakes: "+mistakes.length+"</p>";document.getElementById("result").innerHTML="";}
-function showMistakes(){hideNext();document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";document.getElementById("question").innerHTML="❌ Mistakes";document.getElementById("answers").innerHTML=mistakes.length?mistakes.map((m,i)=>"<p>"+(i+1)+". "+m+"</p>").join(""):"<p>No mistakes yet ✅</p>";document.getElementById("result").innerHTML="";}
+function showOral(){
+answered=false;
+let q=oralQueue[oralIndex];
+window.currentOral=q;
+document.getElementById("question").innerHTML="Oral Question "+(oralIndex+1)+"/"+oralQueue.length+"<br><br>"+q.q;
+document.getElementById("answers").innerHTML="<textarea id='oralAnswer' placeholder='Write your oral-style answer here...'></textarea><button onclick='checkOral()'>Check My Answer</button>";
+document.getElementById("result").innerHTML="";
+}
 
-function showStudy(){hideNext();document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";document.getElementById("question").innerHTML="📚 Study Mode";let html="";Object.keys(studyData).forEach(t=>{html+="<button onclick='studyTopic(\""+t+"\")'>"+t+"</button>";});document.getElementById("answers").innerHTML=html;document.getElementById("result").innerHTML="";}
+function checkOral(){
+if(answered){return;}
+answered=true;
+let answer=document.getElementById("oralAnswer").value.toLowerCase();
+let q=window.currentOral;
+let found=0, missed=[];
+q.key.forEach(k=>{if(answer.includes(k)){found++;}else{missed.push(k);}});
+document.getElementById("result").innerHTML="Score: "+found+"/"+q.key.length+"<br><br>Missed points:<br>"+missed.join("<br>");
+document.getElementById("answers").innerHTML += "<button onclick='nextOral()'>Next Oral Question</button>";
+}
+
+function nextOral(){
+oralIndex++;
+if(oralIndex>=oralQueue.length){
+document.getElementById("question").innerHTML="🎤 Oral Exam Finished";
+document.getElementById("answers").innerHTML="<p>All oral questions completed. Return to menu to start again.</p>";
+document.getElementById("result").innerHTML="";
+return;
+}
+showOral();
+}
+
+function startScenario(){
+hideNext();
+answered=false;
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
+scenarioQueue=[...scenarios].sort(()=>0.5-Math.random());
+scenarioIndex=0;
+showScenario();
+}
+
+function showScenario(){
+answered=false;
+let s=scenarioQueue[scenarioIndex];
+window.currentScenario=s;
+document.getElementById("question").innerHTML="Scenario "+(scenarioIndex+1)+"/"+scenarioQueue.length+"<br><br>🚨 "+s.title+"<br><br>"+s.question;
+document.getElementById("answers").innerHTML="<textarea id='scenarioAnswer' placeholder='Write your actions...'></textarea><button onclick='checkScenario()'>Submit</button>";
+document.getElementById("result").innerHTML="";
+}
+
+function checkScenario(){
+if(answered){return;}
+answered=true;
+let answer=document.getElementById("scenarioAnswer").value.toLowerCase();
+let s=window.currentScenario;
+let found=0, missed=[];
+s.points.forEach(p=>{if(answer.includes(p)){found++;}else{missed.push(p);}});
+document.getElementById("result").innerHTML="Score: "+found+"/"+s.points.length+"<br><br>Missing points:<br>"+missed.join("<br>");
+document.getElementById("answers").innerHTML += "<button onclick='nextScenario()'>Next Scenario</button>";
+}
+
+function nextScenario(){
+scenarioIndex++;
+if(scenarioIndex>=scenarioQueue.length){
+document.getElementById("question").innerHTML="🚨 Scenarios Finished";
+document.getElementById("answers").innerHTML="<p>All scenarios completed. Return to menu to start again.</p>";
+document.getElementById("result").innerHTML="";
+return;
+}
+showScenario();
+}
+
+function showProgress(){
+hideNext();
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
+let percent=questions.length?Math.round((score/questions.length)*100):0;
+document.getElementById("question").innerHTML="📊 Progress";
+document.getElementById("answers").innerHTML="<p>Total Quick Test Questions: "+questions.length+"</p><p>Current Score: "+score+"</p><p>Progress: "+percent+"%</p><p>Mistakes saved: "+mistakes.length+"</p><p>Study topics: "+Object.keys(studyData).length+"</p><p>Oral questions: "+oralQuestions.length+"</p><p>Scenarios: "+scenarios.length+"</p>";
+document.getElementById("result").innerHTML="";
+}
+function showMistakes(){
+hideNext();
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
+document.getElementById("question").innerHTML="❌ Mistakes";
+document.getElementById("answers").innerHTML=mistakes.length?mistakes.map((m,i)=>"<p>"+(i+1)+". "+m+"</p>").join(""):"<p>No mistakes yet ✅</p>";
+document.getElementById("result").innerHTML="";
+}
+
+function showStudy(){
+hideNext();
+document.getElementById("menu").style.display="none";
+document.getElementById("quiz").style.display="block";
+document.getElementById("question").innerHTML="📚 Study Mode";
+let html="<div class='grid'>";
+Object.keys(studyData).forEach(t=>{html+="<button onclick='studyTopic(\""+t+"\")'>"+t+"</button>";});
+html+="</div>";
+document.getElementById("answers").innerHTML=html;
+document.getElementById("result").innerHTML="";
+}
 function studyTopic(topic){currentTopic=topic;currentSlide=0;showSlide();}
-function showSlide(){hideNext();let slides=studyData[currentTopic];document.getElementById("question").innerHTML="📚 "+currentTopic+"<br><br>Slide "+(currentSlide+1)+"/"+slides.length;document.getElementById("answers").innerHTML="<p>"+slides[currentSlide]+"</p><button onclick='prevSlide()'>⬅ Previous</button><button onclick='nextSlideStudy()'>Next ➡</button>";document.getElementById("result").innerHTML="";}
-function nextSlideStudy(){if(currentSlide<studyData[currentTopic].length-1){currentSlide++;showSlide();}}
+function showSlide(){
+hideNext();
+let slides=studyData[currentTopic];
+document.getElementById("question").innerHTML="📚 "+currentTopic+"<br><br>Slide "+(currentSlide+1)+"/"+slides.length;
+document.getElementById("answers").innerHTML="<p>"+slides[currentSlide]+"</p><button onclick='prevSlide()'>⬅ Previous</button><button onclick='nextSlideStudy()'>Next ➡</button>";
+document.getElementById("result").innerHTML="";
+}
+function nextSlideStudy(){
+let slides=studyData[currentTopic];
+if(currentSlide<slides.length-1){currentSlide++;showSlide();}
+else{
+document.getElementById("question").innerHTML="📚 "+currentTopic+" Finished";
+document.getElementById("answers").innerHTML="<p>Topic completed. Return to menu or choose another Study topic.</p><button onclick='showStudy()'>Choose Study Topic</button>";
+document.getElementById("result").innerHTML="";
+}
+}
 function prevSlide(){if(currentSlide>0){currentSlide--;showSlide();}}
 </script>
-
 </body>
 </html>
