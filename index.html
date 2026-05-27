@@ -28,7 +28,7 @@ button{font-family:inherit}
 .modeBtn:hover,.studyBtn:hover,.answer:hover,.actionBtn:hover{transform:translateY(-1px);border-color:rgba(246,196,83,.5)}
 .answer:disabled{opacity:.55;cursor:not-allowed;transform:none}
 .studyList{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-#quiz{display:none}
+#quiz{display:none;scroll-margin-top:12px}
 .questionHeader{color:var(--gold);font-size:14px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
 #question{font-size:26px;line-height:1.25;margin:0 0 18px}
 #answers{display:grid;gap:12px}
@@ -101,10 +101,7 @@ function saveState(){localStorage.setItem('ukfse_mistakes',JSON.stringify(mistak
 function shuffle(a){return[...a].sort(()=>Math.random()-.5)}
 function hideNext(){document.getElementById("nextBtn").style.display="none"}
 function showNext(){document.getElementById("nextBtn").style.display="block"}
-function setView(meta,q,html,result=""){document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";document.getElementById("questionMeta").innerHTML=meta;document.getElementById("question").innerHTML=q;document.getElementById("answers").innerHTML=html;document.getElementById("result").innerHTML=result;document.getElementById("quiz").scrollIntoView({
-behavior:"smooth",
-block:"start"
-})
+function setView(meta,q,html,result=""){document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";document.getElementById("questionMeta").innerHTML=meta;document.getElementById("question").innerHTML=q;document.getElementById("answers").innerHTML=html;document.getElementById("result").innerHTML=result;document.getElementById("quiz").scrollIntoView({behavior:"smooth",block:"start"})}
 function backToMenu(){document.getElementById("quiz").style.display="none";document.getElementById("menu").style.display="block";document.getElementById("questionMeta").innerHTML="";showNext();window.scrollTo({top:0,behavior:"smooth"})}
 function resetSession(){score=0;quizScore=0;quizAnsweredCount=0;mistakes=[];weakTopics={};answered=false;finished=false;saveState();alert("Session reset.")}
 function addWeak(topic){weakTopics[topic]=(weakTopics[topic]||0)+1;saveState()}
