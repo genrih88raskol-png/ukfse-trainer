@@ -101,7 +101,10 @@ function saveState(){localStorage.setItem('ukfse_mistakes',JSON.stringify(mistak
 function shuffle(a){return[...a].sort(()=>Math.random()-.5)}
 function hideNext(){document.getElementById("nextBtn").style.display="none"}
 function showNext(){document.getElementById("nextBtn").style.display="block"}
-function setView(meta,q,html,result=""){document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";document.getElementById("questionMeta").innerHTML=meta;document.getElementById("question").innerHTML=q;document.getElementById("answers").innerHTML=html;document.getElementById("result").innerHTML=result;window.scrollTo({top:0,behavior:"smooth"})}
+function setView(meta,q,html,result=""){document.getElementById("menu").style.display="none";document.getElementById("quiz").style.display="block";document.getElementById("questionMeta").innerHTML=meta;document.getElementById("question").innerHTML=q;document.getElementById("answers").innerHTML=html;document.getElementById("result").innerHTML=result;document.getElementById("quiz").scrollIntoView({
+behavior:"smooth",
+block:"start"
+})
 function backToMenu(){document.getElementById("quiz").style.display="none";document.getElementById("menu").style.display="block";document.getElementById("questionMeta").innerHTML="";showNext();window.scrollTo({top:0,behavior:"smooth"})}
 function resetSession(){score=0;quizScore=0;quizAnsweredCount=0;mistakes=[];weakTopics={};answered=false;finished=false;saveState();alert("Session reset.")}
 function addWeak(topic){weakTopics[topic]=(weakTopics[topic]||0)+1;saveState()}
